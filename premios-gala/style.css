@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: url('fotos/josemarifondo.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+}
+
+/* Encabezado */
+header .overlay {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 50px;
+  text-align: center;
+  border-bottom: 5px solid gold;
+}
+
+header h1 {
+  color: gold;
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(255,215,0,0.8);
+}
+
+header p {
+  font-size: 1.2rem;
+}
+
+/* Navegación */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+nav button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid gold;
+  background: linear-gradient(135deg, darkred, #8b0000);
+  color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+nav button:hover {
+  background: gold;
+  color: darkred;
+  transform: translateY(-2px);
+}
+
+/* Sección */
+.seccion {
+  background: rgba(0,0,0,0.5);
+  padding: 30px;
+  margin: 20px auto;
+  border-radius: 15px;
+  border: 2px solid gold;
+  max-width: 1100px;
+}
+
+/* Grid de participantes */
+.grid-participantes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+}
+
+.participante {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  padding: 15px;
+  border-radius: 15px;
+  width: 200px;
+  text-align: center;
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.participante:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+}
+
+.participante img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 2px solid gold;
+}
+
+.participante h3 {
+  color: gold;
+  font-size: 18px;
+  margin: 8px 0 4px;
+}
+
+.participante p {
+  font-size: 14px;
+  color: #ddd;
+}
+
+/* Botón de voto */
+button.voto {
+  padding: 8px 16px;
+  margin-top: 8px;
+  border: 2px solid gold;
+  background: linear-gradient(135deg, darkred, #8b0000);
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button.voto:hover {
+  background: gold;
+  color: darkred;
+  transform: translateY(-2px);
+}
+
+button.voto.selected {
+  background: gold;
+  color: darkred;
+  border-color: gold;
+}

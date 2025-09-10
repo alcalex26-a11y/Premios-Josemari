@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gala de Premios Amigos 2025</title>
+  <link rel="stylesheet" href="style.css">
+
+<!-- Firebase App + Lógica de votación + Resultados en tiempo real -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNfmxGA8GNgWf-N1sstPhQlWitYMjnd6M",
+      authDomain: "premiosjosemari-bc894.firebaseapp.com",
+      projectId: "premiosjosemari-bc894",
+      storageBucket: "premiosjosemari-bc894.appspot.com",
+      messagingSenderId: "118315358578",
+      appId: "1:118315358578:web:4c6c2248fdbdd4f61e65eb",
+      measurementId: "G-GSKV2FY60L"
+    };
+  
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+  
+    // --- Lógica de votación ---
+    const votosSeleccionados = {};
+  
+    window.mostrarSeccion = function(seccion) {
+      document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+      document.getElementById(seccion).style.display = 'block';
+    }
+  
+    document.querySelectorAll('.voto').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const categoria = btn.dataset.categoria;
+        const nominado = btn.dataset.nominado;
+        votosSeleccionados[categoria] = nominado;
+  
+        document.querySelectorAll(`.voto[data-categoria="${categoria}"]`).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+  
+    document.getElementById('enviarVoto').addEventListener('click', async () => {
+      const categorias = ["Mejor amigo", "Más divertido", "Más creativo"];
+      for (let cat of categorias) {
+        if (!votosSeleccionados[cat]) {
+          alert(`Debes seleccionar un participante para "${cat}"`);
+          return;
+        }
+      }
+  
+      try {
+        for (let cat of categorias) {
+          await addDoc(collection(db, "votos"), {
+            categoria: cat,
+            nominado: votosSeleccionados[cat],
+            fecha: serverTimestamp()
+          });
+        }
+        alert("¡Tus votos han sido registrados!");
+        Object.keys(votosSeleccionados).forEach(k => delete votosSeleccionados[k]);
+        document.querySelectorAll('.voto').forEach(b => b.classList.remove('selected'));
+      } catch (e) {
+        console.error("Error guardando votos: ", e);
+        alert("Hubo un error al guardar tus votos.");
+      }
+    });
+  
+    // --- Resultados en tiempo real ---
+    const listaResultados = document.getElementById("listaResultados");
+  
+    onSnapshot(collection(db, "votos"), (snapshot) => {
+      const conteo = {};
+  
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const categoria = data.categoria;
+        const nominado = data.nominado;
+  
+        if (!conteo[categoria]) conteo[categoria] = {};
+        if (!conteo[categoria][nominado]) conteo[categoria][nominado] = 0;
+  
+        conteo[categoria][nominado]++;
+      });
+  
+      // Mostrar resultados
+      listaResultados.innerHTML = "";
+      for (let categoria in conteo) {
+        const divCat = document.createElement("div");
+        divCat.innerHTML = `<h3>${categoria}</h3>`;
+        const lista = document.createElement("ul");
+  
+        // Ordenar de mayor a menor votos
+        const ordenados = Object.entries(conteo[categoria]).sort((a,b) => b[1] - a[1]);
+        ordenados.forEach(([nominado, votos]) => {
+          const li = document.createElement("li");
+          li.textContent = `${nominado}: ${votos} voto${votos !== 1 ? 's' : ''}`;
+          lista.appendChild(li);
+        });
+  
+        divCat.appendChild(lista);
+        listaResultados.appendChild(divCat);
+      }
+    });
+  </script>
+  
+  
+  
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="overlay">
+      <h1>Gala de Premios Amigos 2025</h1>
+      <p>¡Vota por tus amigos favoritos!</p>
+      <button onclick="mostrarSeccion('votacion')">Vota Ahora</button>
+    </div>
+  </header>
+
+  <!-- Navegación -->
+  <nav>
+    <button onclick="mostrarSeccion('participantes')">Participantes</button>
+    <button onclick="mostrarSeccion('categorias')">Categorías</button>
+    <button onclick="mostrarSeccion('votacion')">Votación</button>
+  </nav>
+
+<!-- PARTICIPANTES -->
+<section id="participantes" class="seccion">
+    <h2>Participantes</h2>
+    <div class="grid-participantes">
+      <div class="participante">
+        <img src="fotos/asieras.png" alt="Asieras">
+        <h3>Asieras</h3>
+        <p>Asieras siempre tiene una sonrisa para todos.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/rulillas.jpg" alt="Rulillas">
+        <h3>Rulillas</h3>
+        <p>Rulillas es creativo y lleno de energía.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/darawayas.jpg" alt="Darawayas">
+        <h3>Darawayas</h3>
+        <p>Darawayas aporta diversión y buen humor al grupo.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/ivanpechotes.jpg" alt="Ivanpechotes">
+        <h3>Ivanpechotes</h3>
+        <p>Ivanpechotes siempre sorprende con ideas únicas.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/maria.jpg" alt="Maria">
+        <h3>Maria</h3>
+        <p>Maria es amigable y muy solidaria.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/poru.jpg" alt="Poru">
+        <h3>Poru</h3>
+        <p>Poru siempre anima el ambiente con su energía.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/ines.jpg" alt="Ines">
+        <h3>Ines</h3>
+        <p>Ines es creativa y divertida.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/lucia.jpg" alt="Lucia">
+        <h3>Lucia</h3>
+        <p>Lucia aporta ideas brillantes y es muy simpática.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/labrada.jpg" alt="Labrada">
+        <h3>Labrada</h3>
+        <p>Labrada es siempre confiable y divertido.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/gamepro.jpg" alt="Gamepro">
+        <h3>Gamepro</h3>
+        <p>Gamepro es competitivo y siempre busca ganar.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/fermoriv.jpg" alt="Fermoriv">
+        <h3>Fermoriv</h3>
+        <p>Fermoriv aporta risas y buen ambiente.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/fervico.jpg" alt="Fervico">
+        <h3>Fervico</h3>
+        <p>Fervico siempre tiene ideas originales.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/mario.jpg" alt="Mario">
+        <h3>Mario</h3>
+        <p>Mario es amigable y muy ingenioso.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/dani.jpg" alt="Dani">
+        <h3>Dani</h3>
+        <p>Dani siempre anima el grupo con su humor.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/manu.jpg" alt="Manu">
+        <h3>Manu</h3>
+        <p>Manu es creativo y muy entusiasta.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/marco.jpg" alt="Marco">
+        <h3>Marco</h3>
+        <p>Marco aporta alegría y diversión al grupo.</p>
+      </div>
+      <div class="participante">
+        <img src="fotos/rober.jpg" alt="Rober">
+        <h3>Rober</h3>
+        <p>Rober siempre está dispuesto a ayudar y animar.</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Categorías -->
+  <section id="categorias" class="seccion" style="display:none;">
+    <h2>Categorías</h2>
+    <ul>
+      <li>Mejor amigo</li>
+      <li>Más divertido</li>
+      <li>Más creativo</li>
+    </ul>
+  </section>
+
+  <!-- Votación -->
+  <section id="votacion" class="seccion" style="display:none;">
+    <h2>Votación</h2>
+    <p>Selecciona tus nominados y haz clic en "VOTAR"</p>
+
+    <div class="categoria">
+      <h3>Mejor amigo</h3>
+      <button class="voto" data-categoria="Mejor amigo" data-nominado="Asieras">Asieras</button>
+      <button class="voto" data-categoria="Mejor amigo" data-nominado="Rulillas">Rulillas</button>
+      <button class="voto" data-categoria="Mejor amigo" data-nominado="Darawayas">Darawayas</button>
+    </div>
+
+    <div class="categoria">
+      <h3>Más divertido</h3>
+      <button class="voto" data-categoria="Más divertido" data-nominado="Asieras">Asieras</button>
+      <button class="voto" data-categoria="Más divertido" data-nominado="Rulillas">Rulillas</button>
+      <button class="voto" data-categoria="Más divertido" data-nominado="Darawayas">Darawayas</button>
+    </div>
+
+    <div class="categoria">
+      <h3>Más creativo</h3>
+      <button class="voto" data-categoria="Más creativo" data-nominado="Asieras">Asieras</button>
+      <button class="voto" data-categoria="Más creativo" data-nominado="Rulillas">Rulillas</button>
+      <button class="voto" data-categoria="Más creativo" data-nominado="Darawayas">Darawayas</button>
+    </div>
+
+    <br>
+    <button id="enviarVoto">VOTAR</button>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
