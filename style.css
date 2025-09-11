@@ -335,5 +335,59 @@ footer {
   #votacion-nominados2 {
     display: block;
   }
-  
+  /* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  /* NAV */
+  .nav-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .nav-actions {
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+  }
+  .nav-actions .btn {
+    flex: 1 1 calc(50% - 6px);
+    text-align: center;
+  }
+
+  /* HERO */
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  .hero-imagen {
+    margin-left: 0;
+  }
+  .hero-imagen img {
+    max-width: 100%;
+  }
+
+  /* TITULOS */
+  h1 {
+    font-size: 2rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  /* GRIDS */
+  .grid-participantes {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .grid-nominados {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  /* BOTONES */
+  .btn {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
   
