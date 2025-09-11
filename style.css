@@ -355,14 +355,21 @@ footer {
 
   /* HERO */
   .hero-inner {
-    flex-direction: column;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* antes space-between */
     gap: 20px;
-    padding: 20px;
+    padding: 0;
+    margin: 0 auto; /* centra el contenedor */
+    width: 100%;
+    max-width: 1100px; /* límite para que no se estire demasiado */
   }
+  
   .hero-imagen {
-    margin-left: 0;
+    flex-shrink: 0;
+    margin-left: 0; /* antes auto */
   }
+  
   .hero-imagen img {
     max-width: 100%;
   }
@@ -388,6 +395,36 @@ footer {
     width: 100%;
     padding: 10px;
   }
+  @media (max-width: 768px) {
+    .hero-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+    .hero-imagen img {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    /* Participantes más pequeños en móvil */
+.grid-participantes {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* antes 120px */
+}
+.participante img {
+  height: 120px; /* antes 160px */
+}
+
+/* Nominados más pequeños en móvil */
+.grid-nominados {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* antes 120px */
+}
+.nominado img {
+  width: 80%; /* antes 90% */
+}
+.nominado {
+  padding: 6px; /* menos padding para que se vea más compacto */
+}
+
+  }
+  
 }
 
   
