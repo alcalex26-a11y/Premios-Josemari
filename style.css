@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   color: var(--text);
-  background: url('fotos/josemarifondo.png') no-repeat center center fixed;
+  background: url('fotos/FONDO JOSEMARI.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -199,7 +199,7 @@ main {
 }
 
 .seccion h2 {
-  margin: 0 0 12px;
+  margin: 10 12px;
   color: var(--gold);
 }
 
@@ -295,6 +295,45 @@ footer {
   }
   .hero {
     padding-right: 0; /* sin relleno a la derecha */
+  }
+  
+  .grid-nominados {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  .nominado {
+    background: #222;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid gold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .nominado img {
+    width: 90%;
+    height: auto;
+    border-radius: 1px;
+    margin-bottom: 5px;
+  }
+  
+  .nominado:hover {
+    background: #333;
+  }
+  
+  .nominado.selected {
+    background: gold;
+    color: black;
+    font-weight: bold;
+  }
+  #votacion-nominados,
+  #votacion-nominados2 {
+    display: block;
   }
   
   

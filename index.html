@@ -20,6 +20,7 @@
         <button class="btn" onclick="mostrarSeccion('participantes')">Participantes</button>
         <button class="btn" onclick="mostrarSeccion('categorias')">Categorías</button>
         <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
+        <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Votación nominados</button>
       </div>
     </div>
   </nav>
@@ -38,7 +39,7 @@
         </div>
       </div>
       <div class="hero-imagen">
-        <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
+        <img src="fotos/FONDO JOSEMARI.png" alt="Imagen de inicio">
       </div>
     </div>
   </header>
@@ -63,13 +64,31 @@
         <div class="participante"><img src="fotos/maria.jpeg" alt="Maria"><h3>Maria</h3></div>
         <div class="participante"><img src="fotos/gamepro.jpeg" alt="Gamepro"><h3>Gamepro</h3></div>
         <div class="participante"><img src="fotos/fervico.jpeg" alt="El Enano"><h3>El Enano</h3></div>
-        <div class="participante"><img src="fotos/poru.jpeg" alt="Poru"><h3>Poru</h3></div>
+        <div class="participante"><img src="fotos/Poru.jpeg" alt="Poru"><h3>Poru</h3></div>
         <div class="participante"><img src="fotos/iker.jpeg" alt="Ikardo"><h3>Ikardo</h3></div>
         <div class="participante"><img src="fotos/Fermoriv.jpeg" alt="Fermoriv"><h3>Fermoriv</h3></div>
         <div class="participante"><img src="fotos/labrada.jpeg" alt="Lab el Viejo"><h3>Lab el Viejo</h3></div>
 <!-- Modal para mostrar participante -->
 </div>
 </section>
+<script>
+  function mostrarSeccion(seccion) {
+    document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+    document.getElementById(seccion).style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+    if (seccion === 'votacion-nominados') {
+      // Limpiar antes de rellenar para evitar duplicados
+      document.getElementById('lista-nominados-1').innerHTML = '';
+      document.getElementById('lista-nominados-2').innerHTML = '';
+  
+      crearApartadoNominaciones('lista-nominados-1', 'enviarNominados1', 'nominaciones_soltero');
+      crearApartadoNominaciones('lista-nominados-2', 'enviarNominados2', 'nominaciones_otro');
+    }
+  }
+    </script>
+  
+  
 
 <!-- Modal fuera de la sección -->
 <!-- Modal fuera de la sección -->
@@ -125,22 +144,48 @@
 
       <button id="enviarVoto" class="btn gold">VOTAR</button>
     </section>
+
+    <section id="votacion-nominados" class="seccion" style="display:none;">
+      <h2>Fiester@ del año</h2>
+      <p>Selecciona hasta <strong>3</strong> candidatos.</p>
+      <div id="lista-nominados-1" class="grid-nominados"></div>
+    
+      <h2>Borrach@ del año</h2>
+      <p>Selecciona hasta <strong>3</strong> candidatos.</p>
+      <div id="lista-nominados-2" class="grid-nominados"></div>
+    
+      <h2>Más guarr@ del año</h2>
+      <p>Selecciona hasta <strong>3</strong> candidatos.</p>
+      <div id="lista-nominados-3" class="grid-nominados"></div>
+    
+      <h2>Viajero/a</h2>
+      <p>Selecciona hasta <strong>3</strong> candidatos.</p>
+      <div id="lista-nominados-4" class="grid-nominados"></div>
+    
+      <h2>Otra categoría</h2>
+      <p>Selecciona hasta <strong>3</strong> candidatos.</p>
+      <div id="lista-nominados-5" class="grid-nominados"></div>
+    
+      <!-- Botón único -->
+      <button id="enviarTodasNominaciones" class="btn gold">Enviar todas las nominaciones</button>
+    </section>
+    
+
+
+    
   </main>
 
+  
   <footer>
-    © Gala de Premios Amigos 2025 — Hecho con cariño para el grupo.
+    © Premios Josemari 2025 — Hecho por Iceman.
   </footer>
 
-  <script>
-    function mostrarSeccion(seccion) {
-      document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
-      document.getElementById(seccion).style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  </script>
+    
+  
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
     
     const firebaseConfig = {
       apiKey: "AIzaSyBNfmxGA8GNgWf-N1sstPhQlWitYMjnd6M",
@@ -152,52 +197,182 @@
     };
     
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    
-    
-    // --- Lógica de votos ---
-    const votosSeleccionados = {};
-    document.querySelectorAll('.voto').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const categoria = btn.dataset.categoria;
-        const nominado = btn.dataset.nominado;
-        votosSeleccionados[categoria] = nominado;
-        document.querySelectorAll(`.voto[data-categoria="${categoria}"]`).forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-      });
-    });
-    
-    const enviarBtn = document.getElementById('enviarVoto');
-    enviarBtn.addEventListener('click', async () => {
-      const categorias = ["Mejor amigo", "Más divertido", "Más creativo"];
+const db = getFirestore(app);
+
+// --- Obtener o pedir usuario ---
+let usuarioActual = localStorage.getItem("usuario");
+if (!usuarioActual) {
+  usuarioActual = prompt("Introduce tu nombre para votar:");
+  if (usuarioActual && usuarioActual.trim() !== "") {
+    localStorage.setItem("usuario", usuarioActual.trim());
+  } else {
+    alert("Debes introducir un nombre para poder votar.");
+  }
+}
+
+// =========================
+// FUNCIÓN PARA CAMBIAR DE SECCIÓN
+// =========================
+window.mostrarSeccion = function (seccion) {
+  document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+  document.getElementById(seccion).style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (seccion === 'votacion-nominados') {
+    document.getElementById('lista-nominados-1').innerHTML = '';
+    document.getElementById('lista-nominados-2').innerHTML = '';
+    document.getElementById('lista-nominados-3').innerHTML = '';
+    document.getElementById('lista-nominados-4').innerHTML = '';
+    document.getElementById('lista-nominados-5').innerHTML = '';
+
+    crearApartadoNominaciones('lista-nominados-1', 'enviarNominados1', 'nominaciones_fiestero');
+    crearApartadoNominaciones('lista-nominados-2', 'enviarNominados2', 'nominaciones_borracho');
+    crearApartadoNominaciones('lista-nominados-3', 'enviarNominados3', 'nominaciones_mas_guarro');
+    crearApartadoNominaciones('lista-nominados-4', 'enviarNominados4', 'nominaciones_viajero');
+    crearApartadoNominaciones('lista-nominados-5', 'enviarNominados5', 'nominaciones_otra');
+  }
+};
+
+// =========================
+// VOTACIÓN NORMAL
+// =========================
+const votosSeleccionados = {};
+document.querySelectorAll('.voto').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const categoria = btn.dataset.categoria;
+    const nominado = btn.dataset.nominado;
+    votosSeleccionados[categoria] = nominado;
+
+    document.querySelectorAll(`.voto[data-categoria="${categoria}"]`)
+      .forEach(b => b.classList.remove('selected'));
+
+    btn.classList.add('selected');
+  });
+});
+
+const enviarBtn = document.getElementById('enviarVoto');
+if (enviarBtn) {
+  enviarBtn.addEventListener('click', async () => {
+    const categorias = ["Mejor amigo", "Más divertido", "Más creativo"];
+    for (let cat of categorias) {
+      if (!votosSeleccionados[cat]) {
+        alert(`Debes seleccionar un participante para "${cat}"`);
+        return;
+      }
+    }
+    try {
+      enviarBtn.disabled = true;
       for (let cat of categorias) {
-        if (!votosSeleccionados[cat]) {
-          alert(`Debes seleccionar un participante para "${cat}"`);
+        await addDoc(collection(db, "votos"), {
+          usuario: usuarioActual,
+          categoria: cat,
+          nominado: votosSeleccionados[cat],
+          fecha: serverTimestamp()
+        });
+      }
+      alert("¡Tus votos han sido registrados!");
+      localStorage.removeItem("usuario");
+      location.reload();
+    } catch (e) {
+      console.error("Error guardando votos: ", e);
+      alert("Hubo un error al guardar tus votos.");
+    } finally {
+      enviarBtn.disabled = false;
+    }
+  });
+}
+
+// =========================
+// FUNCIÓN REUTILIZABLE PARA NOMINACIONES
+// =========================
+// Objeto global para guardar las selecciones
+const nominacionesPorCategoria = {};
+
+function crearApartadoNominaciones(idLista, categoriaKey) {
+  const contenedor = document.getElementById(idLista);
+  const participantes = document.querySelectorAll('#participantes .participante');
+  nominacionesPorCategoria[categoriaKey] = [];
+
+  participantes.forEach(part => {
+    const nombre = part.querySelector('h3').innerText.trim();
+    const foto = part.querySelector('img').src;
+    const div = document.createElement('div');
+    div.classList.add('nominado');
+    div.dataset.nombre = nombre;
+    div.innerHTML = `<img src="${foto}" alt="${nombre}"><span>${nombre}</span>`;
+    contenedor.appendChild(div);
+  });
+
+  const maxSeleccion = 3;
+  contenedor.querySelectorAll('.nominado').forEach(item => {
+    item.addEventListener('click', () => {
+      const nombre = item.dataset.nombre;
+      if (item.classList.contains('selected')) {
+        item.classList.remove('selected');
+        nominacionesPorCategoria[categoriaKey] =
+          nominacionesPorCategoria[categoriaKey].filter(n => n !== nombre);
+      } else {
+        if (nominacionesPorCategoria[categoriaKey].length >= maxSeleccion) {
+          alert(`Solo puedes seleccionar ${maxSeleccion} nominados en esta categoría.`);
           return;
         }
-      }
-      try {
-        enviarBtn.disabled = true;
-        for (let cat of categorias) {
-          await addDoc(collection(db, "votos"), {
-            usuario: usuarioActual,
-            categoria: cat,
-            nominado: votosSeleccionados[cat],
-            fecha: serverTimestamp()
-          });
-        }
-        alert("¡Tus votos han sido registrados!");
-        localStorage.removeItem("usuario"); // Para que no pueda volver a votar
-        location.reload();
-      } catch (e) {
-        console.error("Error guardando votos: ", e);
-        alert("Hubo un error al guardar tus votos.");
-      } finally {
-        enviarBtn.disabled = false;
+        item.classList.add('selected');
+        nominacionesPorCategoria[categoriaKey].push(nombre);
       }
     });
-    </script>
+  });
+}
 
+window.mostrarSeccion = function (seccion) {
+  document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+  document.getElementById(seccion).style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (seccion === 'votacion-nominados') {
+    ['lista-nominados-1','lista-nominados-2','lista-nominados-3','lista-nominados-4','lista-nominados-5']
+      .forEach(id => document.getElementById(id).innerHTML = '');
+
+    crearApartadoNominaciones('lista-nominados-1', 'nominaciones_fiestero');
+    crearApartadoNominaciones('lista-nominados-2', 'nominaciones_borracho');
+    crearApartadoNominaciones('lista-nominados-3', 'nominaciones_mas_guarro');
+    crearApartadoNominaciones('lista-nominados-4', 'nominaciones_viajero');
+    crearApartadoNominaciones('lista-nominados-5', 'nominaciones_otra');
+  }
+};
+
+// Botón único para enviar todas las nominaciones
+document.getElementById('enviarTodasNominaciones').addEventListener('click', async () => {
+  // Validar que cada categoría tenga al menos 1 nominado
+  for (const categoria in nominacionesPorCategoria) {
+    if (nominacionesPorCategoria[categoria].length === 0) {
+      alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
+      return;
+    }
+  }
+
+  try {
+    for (const categoria in nominacionesPorCategoria) {
+      await addDoc(collection(db, "nominaciones"), {
+        usuario: usuarioActual,
+        categoria: categoria,
+        nominados: nominacionesPorCategoria[categoria],
+        fecha: serverTimestamp()
+      });
+    }
+    alert("¡Todas tus nominaciones han sido registradas!");
+    document.querySelectorAll('.nominado').forEach(n => n.classList.remove('selected'));
+    for (const categoria in nominacionesPorCategoria) {
+      nominacionesPorCategoria[categoria] = [];
+    }
+  } catch (e) {
+    console.error("Error guardando nominaciones: ", e);
+    alert("Hubo un error al guardar tus nominaciones.");
+  }
+});
+
+</script>
+
+</script> 
 <script>
     const descripciones = {
       "Asieras": "ASIER es apodado el chichotas y es el orgulloso dueño de nuestro campo de veraneo, un lugar que siempre reúne al grupo. Además, comparte con Rulas la creatividad de ser uno de los creadores de los Premios Jose Mari, una tradición ya icónica.",
@@ -239,5 +414,3 @@ spanCerrar.onclick = () => modal.style.display = "none";
 window.onclick = e => { if (e.target == modal) modal.style.display = "none"; }
 </script>
     
-    
-  
