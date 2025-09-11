@@ -1,52 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gala de Premios Amigos 2025</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PREMIOS J&P 2025</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<!-- Firebase App + Lógica de votación + Resultados en tiempo real -->
+
+  <!-- NAV -->
+  <nav class="top">
+    <div class="nav-inner">
+      <div class="logo">Josemari Awards 2025</div>
+      <div class="nav-actions">
+        <button class="btn" onclick="mostrarSeccion('inicio')">Inicio</button>
+        <button class="btn" onclick="mostrarSeccion('participantes')">Participantes</button>
+        <button class="btn" onclick="mostrarSeccion('categorias')">Categorías</button>
+        <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
+      </div>
+    </div>
+  </nav>
+
+<!-- INICIO -->
+<header class="hero seccion" id="inicio">
+    <div class="shine"></div>
+    <div class="hero-inner">
+      <div class="hero-texto">
+        <span class="badge">Gala 2025</span>
+        <h1>Vota a tus amigos</h1>
+        <p class="subtitle">Elige a tus nominados en cada categoría. ¡Haz que tu voto cuente!</p>
+        <div class="cta">
+          <button class="btn gold" onclick="mostrarSeccion('votacion')">Votar ahora</button>
+          <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
+        </div>
+      </div>
+      <div class="hero-imagen">
+        <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
+      </div>
+    </div>
+  </header>
+  
+
+  <main>
+    <!-- PARTICIPANTES -->
+    <section id="participantes" class="seccion">
+      <h2>Participantes</h2>
+      <div class="grid-participantes">
+        <div class="participante"><img src="fotos/asieras.jpeg" alt="Asieras"><h3>Asieras</h3></div>
+        <div class="participante"><img src="fotos/rulillas.jpeg" alt="Rulillas"><h3>Rulillas</h3></div>
+        <div class="participante"><img src="fotos/dario.jpeg" alt="Darawayas"><h3>Darawayas</h3></div>
+        <div class="participante"><img src="fotos/ivanp.jpeg" alt="Ivanpechotes"><h3>Ivanpechotes</h3></div>
+        <div class="participante"><img src="fotos/dani.jpeg" alt="Danigg"><h3>DaniGG</h3></div>
+        <div class="participante"><img src="fotos/Lucia.jpeg" alt="Lusilu"><h3>Lusilu</h3></div>
+        <div class="participante"><img src="fotos/ines.jpeg" alt="Almansa"><h3>Almansa</h3></div>
+        <div class="participante"><img src="fotos/rober.jpeg" alt="Robertuki"><h3>Robertuki</h3></div>
+        <div class="participante"><img src="fotos/marco.jpeg" alt="Toñaco"><h3>Toñaco</h3></div>
+        <div class="participante"><img src="fotos/manu.jpeg" alt="Manolo"><h3>Manolo</h3></div>
+        <div class="participante"><img src="fotos/mario.jpeg" alt="Kastor"><h3>Kastor</h3></div>
+        <div class="participante"><img src="fotos/maria.jpeg" alt="Maria"><h3>Maria</h3></div>
+        <div class="participante"><img src="fotos/gamepro.jpeg" alt="Gamepro"><h3>Gamepro</h3></div>
+        <div class="participante"><img src="fotos/fervico.jpeg" alt="El Enano"><h3>El Enano</h3></div>
+        <div class="participante"><img src="fotos/poru.jpeg" alt="Poru"><h3>Poru</h3></div>
+        <div class="participante"><img src="fotos/iker.jpeg" alt="Ikardo"><h3>Ikardo</h3></div>
+        <div class="participante"><img src="fotos/Fermoriv.jpeg" alt="Fermoriv"><h3>Fermoriv</h3></div>
+        <div class="participante"><img src="fotos/labrada.jpeg" alt="Lab el Viejo"><h3>Lab el Viejo</h3></div>
+<!-- Modal para mostrar participante -->
+</div>
+</section>
+
+<!-- Modal fuera de la sección -->
+<!-- Modal fuera de la sección -->
+<div id="modalParticipante" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <div class="modal-body">
+        <img id="modalImagen" src="" alt="">
+        <div class="modal-texto">
+          <p id="modalDescripcion"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+    <!-- CATEGORÍAS -->
+    <section id="categorias" class="seccion">
+      <h2>Categorías</h2>
+      <ul style="list-style: none; padding-left: 0; font-size: 1.1em;">
+        <li>🏆 Mejor amigo</li>
+        <li>😂 Más divertido</li>
+        <li>🎨 Más creativo</li>
+      </ul>
+    </section>
+
+    <!-- VOTACIÓN -->
+    <section id="votacion" class="seccion">
+      <h2>Votación</h2>
+      <p>Selecciona tus nominados y pulsa “VOTAR”.</p>
+
+      <div class="categoria">
+        <h3>Mejor amigo</h3>
+        <button class="voto" data-categoria="Mejor amigo" data-nominado="Asieras">Asieras</button>
+        <button class="voto" data-categoria="Mejor amigo" data-nominado="Rulillas">Rulillas</button>
+        <button class="voto" data-categoria="Mejor amigo" data-nominado="Darawayas">Darawayas</button>
+      </div>
+
+      <div class="categoria">
+        <h3>Más divertido</h3>
+        <button class="voto" data-categoria="Más divertido" data-nominado="Asieras">Asieras</button>
+        <button class="voto" data-categoria="Más divertido" data-nominado="Rulillas">Rulillas</button>
+        <button class="voto" data-categoria="Más divertido" data-nominado="Darawayas">Darawayas</button>
+      </div>
+
+      <div class="categoria">
+        <h3>Más creativo</h3>
+        <button class="voto" data-categoria="Más creativo" data-nominado="Asieras">Asieras</button>
+        <button class="voto" data-categoria="Más creativo" data-nominado="Rulillas">Rulillas</button>
+        <button class="voto" data-categoria="Más creativo" data-nominado="Darawayas">Darawayas</button>
+      </div>
+
+      <button id="enviarVoto" class="btn gold">VOTAR</button>
+    </section>
+  </main>
+
+  <footer>
+    © Gala de Premios Amigos 2025 — Hecho con cariño para el grupo.
+  </footer>
+
+  <script>
+    function mostrarSeccion(seccion) {
+      document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+      document.getElementById(seccion).style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-  
+    import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    
     const firebaseConfig = {
       apiKey: "AIzaSyBNfmxGA8GNgWf-N1sstPhQlWitYMjnd6M",
       authDomain: "premiosjosemari-bc894.firebaseapp.com",
       projectId: "premiosjosemari-bc894",
       storageBucket: "premiosjosemari-bc894.appspot.com",
       messagingSenderId: "118315358578",
-      appId: "1:118315358578:web:4c6c2248fdbdd4f61e65eb",
-      measurementId: "G-GSKV2FY60L"
+      appId: "1:118315358578:web:4c6c2248fdbdd4f61e65eb"
     };
-  
-    // Inicializar Firebase
+    
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const db = getFirestore(app);
-  
-    // --- Lógica de votación ---
+    
+    
+    // --- Lógica de votos ---
     const votosSeleccionados = {};
-  
-    window.mostrarSeccion = function(seccion) {
-      document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
-      document.getElementById(seccion).style.display = 'block';
-    }
-  
     document.querySelectorAll('.voto').forEach(btn => {
       btn.addEventListener('click', () => {
         const categoria = btn.dataset.categoria;
         const nominado = btn.dataset.nominado;
         votosSeleccionados[categoria] = nominado;
-  
         document.querySelectorAll(`.voto[data-categoria="${categoria}"]`).forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
       });
     });
-  
-    document.getElementById('enviarVoto').addEventListener('click', async () => {
+    
+    const enviarBtn = document.getElementById('enviarVoto');
+    enviarBtn.addEventListener('click', async () => {
       const categorias = ["Mejor amigo", "Más divertido", "Más creativo"];
       for (let cat of categorias) {
         if (!votosSeleccionados[cat]) {
@@ -54,215 +176,68 @@
           return;
         }
       }
-  
       try {
+        enviarBtn.disabled = true;
         for (let cat of categorias) {
           await addDoc(collection(db, "votos"), {
+            usuario: usuarioActual,
             categoria: cat,
             nominado: votosSeleccionados[cat],
             fecha: serverTimestamp()
           });
         }
         alert("¡Tus votos han sido registrados!");
-        Object.keys(votosSeleccionados).forEach(k => delete votosSeleccionados[k]);
-        document.querySelectorAll('.voto').forEach(b => b.classList.remove('selected'));
+        localStorage.removeItem("usuario"); // Para que no pueda volver a votar
+        location.reload();
       } catch (e) {
         console.error("Error guardando votos: ", e);
         alert("Hubo un error al guardar tus votos.");
+      } finally {
+        enviarBtn.disabled = false;
       }
     });
-  
-    // --- Resultados en tiempo real ---
-    const listaResultados = document.getElementById("listaResultados");
-  
-    onSnapshot(collection(db, "votos"), (snapshot) => {
-      const conteo = {};
-  
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const categoria = data.categoria;
-        const nominado = data.nominado;
-  
-        if (!conteo[categoria]) conteo[categoria] = {};
-        if (!conteo[categoria][nominado]) conteo[categoria][nominado] = 0;
-  
-        conteo[categoria][nominado]++;
-      });
-  
-      // Mostrar resultados
-      listaResultados.innerHTML = "";
-      for (let categoria in conteo) {
-        const divCat = document.createElement("div");
-        divCat.innerHTML = `<h3>${categoria}</h3>`;
-        const lista = document.createElement("ul");
-  
-        // Ordenar de mayor a menor votos
-        const ordenados = Object.entries(conteo[categoria]).sort((a,b) => b[1] - a[1]);
-        ordenados.forEach(([nominado, votos]) => {
-          const li = document.createElement("li");
-          li.textContent = `${nominado}: ${votos} voto${votos !== 1 ? 's' : ''}`;
-          lista.appendChild(li);
-        });
-  
-        divCat.appendChild(lista);
-        listaResultados.appendChild(divCat);
-      }
-    });
-  </script>
-  
-  
-  
-</head>
-<body>
-  <!-- Header -->
-  <header>
-    <div class="overlay">
-      <h1>Gala de Premios Amigos 2025</h1>
-      <p>¡Vota por tus amigos favoritos!</p>
-      <button onclick="mostrarSeccion('votacion')">Vota Ahora</button>
-    </div>
-  </header>
+    </script>
 
-  <!-- Navegación -->
-  <nav>
-    <button onclick="mostrarSeccion('participantes')">Participantes</button>
-    <button onclick="mostrarSeccion('categorias')">Categorías</button>
-    <button onclick="mostrarSeccion('votacion')">Votación</button>
-  </nav>
+<script>
+    const descripciones = {
+      "Asieras": "ASIER es apodado el chichotas y es el orgulloso dueño de nuestro campo de veraneo, un lugar que siempre reúne al grupo. Además, comparte con Rulas la creatividad de ser uno de los creadores de los Premios Jose Mari, una tradición ya icónica.",
+      "Rulillas": "RULAS es un amante de la tortilla de patatas y siempre está dispuesto a compartirla. Sus amigos lo imitan muy bien, y además es el creador de los famosos Premios Jose Mari, que ya forman parte de la tradición del grupo.",
+      "Darawayas": "DARIO es el fan número uno de la pam veraniega, algo que siempre lo caracteriza en el grupo. Es el encargado de grabar los vlogs, capturando los mejores momentos de cada salida. Además, tiene su propia tienda de camisetas de fútbol, lo que lo convierte en el experto deportivo de confianza.",
+      "Ivanpechotes": "IVANPE es conocido como el rehén de Jugui Qui Jugui, siempre a su lado en cualquier plan. Es un apasionado del Barcelona y tiene un baile especial con Mozos que nunca falta en las quedadas del grupo.",
+      "DaniGG": "DANI es un militar casposo con carácter fuerte, siempre fiel a su estilo. Tiene novia en Madrid y, aunque “no baja”, eso no le impide ser un aventurero que disfruta de nuevas experiencias y retos.",
+      "Lusilu": "LUCÍA estudia ADE y siempre se interesa por temas de administración y economía. Es una gran fan de Sergio Ramos y no se pierde nada de la Semana Santa, mostrando sus pasiones tanto deportivas como culturales.",
+      "Almansa": "INES estudia Ingeniería de Caminos y ha vivido la experiencia Erasmus con las lituanas, a quienes todos comentan que están muy buenas. Además, le gusta irse temprano de las quedadas, aunque siempre deja su huella antes de marcharse.",
+      "Robertuki": "ROBER es apodado el pingüino obeso del grupo, un mote que lleva con humor. Le encanta Córdoba y siempre se le ve repartiendo palmadas en la espalda, mostrando su carácter amigable y cercano.",
+      "Toñaco": "MARCO tiene un parecido innegable con Pocoyó, algo que siempre saca risas entre sus amigos. Es conocido por no gastar dinero en nada y mucho menos por pagar, detalle que ya es parte de su fama. Además, juega balonmano en el Plata, lo que completa su estilo tan particular",
+      "Manolo": "MANU es conocido por no bajar nunca, prácticamente no queda con el grupo y casi nunca aparece, lo que ya se ha convertido en parte de su leyenda entre los amigos.",
+      "Kastor": "MARIO es un apasionado del fútbol y del Real Madrid, siempre al día con los partidos y noticias. Es muy estudioso y, entre amigos, se comenta que tiene un parecido curioso a un castor.",
+      "Maria": "MARÍA se fue de Erasmus a Francia, viviendo nuevas experiencias y culturas. Estudia Letras y es la orgullosa novia de la famosa Jugui Qui Jugui, lo que la hace aún más conocida y querida en el grupo.",
+      "Gamepro": "GAMEPRO tiene una debilidad por Albacete, su ciudad favorita, que visita siempre que puede. Trabaja en Popeyes y, además, es el orgulloso novio de Iceman, lo que lo hace todavía más querido en el grupo.",
+      "El Enano": "FERVICO es el enano del grupo, apodo que lleva con humor y que ya es parte de su identidad entre amigos. Todos recuerdan que solo ha tocado a una mujer en su vida (¡y vaya tetas!), detalle que se comenta con frecuencia. Aun así, sigue siendo virgen, lo que suma a las bromas y anécdotas que lo rodean.",
+      "Poru": "PORU es un chico al que le encantan las cafeteras, aunque siempre se nos olvida y por eso le decimos “Forgotten”. Es de los que tienen su propio apodo ya ganado en el grupo. Además, no hay duda de que su cantante favorito es Trueno, lo menciona cada vez que puede.",
+      "Ikardo": "IKER es apodado el chino del grupo, siempre con ganas de zorrear y pasar un buen rato. Su sello personal son los pantalones de Bob Esponja, que lleva puestos prácticamente siempre.",
+      "Fermoriv": "FERMORIV es un amante del lanzamiento de quesos, una de esas pasiones raras que ya todos en el grupo reconocen. Siempre aparece de fiesta en fiesta y, sin duda, se convierte en el alma del grupo con su energía y buen humor.",
+      "Lab el Viejo": "LABRADA es el viejo del grupo siempre buscando lo más económicamente rentable en cualquier tema de finanzas. Además, no tiene filtro y es más guarro que un cerdo, lo que lo hace memorable y único entre todos.."
+    };
+    
+    const modal = document.getElementById("modalParticipante");
+const modalImg = document.getElementById("modalImagen");
+const modalDescripcion = document.getElementById("modalDescripcion");
+const spanCerrar = document.querySelector(".cerrar");
 
-<!-- PARTICIPANTES -->
-<section id="participantes" class="seccion">
-    <h2>Participantes</h2>
-    <div class="grid-participantes">
-      <div class="participante">
-        <img src="fotos/asieras.png" alt="Asieras">
-        <h3>Asieras</h3>
-        <p>Asieras siempre tiene una sonrisa para todos.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/rulillas.jpg" alt="Rulillas">
-        <h3>Rulillas</h3>
-        <p>Rulillas es creativo y lleno de energía.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/darawayas.jpg" alt="Darawayas">
-        <h3>Darawayas</h3>
-        <p>Darawayas aporta diversión y buen humor al grupo.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/ivanpechotes.jpg" alt="Ivanpechotes">
-        <h3>Ivanpechotes</h3>
-        <p>Ivanpechotes siempre sorprende con ideas únicas.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/maria.jpg" alt="Maria">
-        <h3>Maria</h3>
-        <p>Maria es amigable y muy solidaria.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/poru.jpg" alt="Poru">
-        <h3>Poru</h3>
-        <p>Poru siempre anima el ambiente con su energía.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/ines.jpg" alt="Ines">
-        <h3>Ines</h3>
-        <p>Ines es creativa y divertida.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/lucia.jpg" alt="Lucia">
-        <h3>Lucia</h3>
-        <p>Lucia aporta ideas brillantes y es muy simpática.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/labrada.jpg" alt="Labrada">
-        <h3>Labrada</h3>
-        <p>Labrada es siempre confiable y divertido.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/gamepro.jpg" alt="Gamepro">
-        <h3>Gamepro</h3>
-        <p>Gamepro es competitivo y siempre busca ganar.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/fermoriv.jpg" alt="Fermoriv">
-        <h3>Fermoriv</h3>
-        <p>Fermoriv aporta risas y buen ambiente.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/fervico.jpg" alt="Fervico">
-        <h3>Fervico</h3>
-        <p>Fervico siempre tiene ideas originales.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/mario.jpg" alt="Mario">
-        <h3>Mario</h3>
-        <p>Mario es amigable y muy ingenioso.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/dani.jpg" alt="Dani">
-        <h3>Dani</h3>
-        <p>Dani siempre anima el grupo con su humor.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/manu.jpg" alt="Manu">
-        <h3>Manu</h3>
-        <p>Manu es creativo y muy entusiasta.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/marco.jpg" alt="Marco">
-        <h3>Marco</h3>
-        <p>Marco aporta alegría y diversión al grupo.</p>
-      </div>
-      <div class="participante">
-        <img src="fotos/rober.jpg" alt="Rober">
-        <h3>Rober</h3>
-        <p>Rober siempre está dispuesto a ayudar y animar.</p>
-      </div>
-    </div>
-  </section>
+document.querySelectorAll(".participante").forEach(part => {
+  part.addEventListener("click", () => {
+    const img = part.querySelector("img");
+    const nombre = part.querySelector("h3").innerText.trim();
+    modalImg.src = img.src;
+    modalDescripcion.innerText = descripciones[nombre] || "Sin descripción disponible.";
+    modal.style.display = "block";
+  });
+});
+
+spanCerrar.onclick = () => modal.style.display = "none";
+window.onclick = e => { if (e.target == modal) modal.style.display = "none"; }
+</script>
+    
+    
   
-
-  <!-- Categorías -->
-  <section id="categorias" class="seccion" style="display:none;">
-    <h2>Categorías</h2>
-    <ul>
-      <li>Mejor amigo</li>
-      <li>Más divertido</li>
-      <li>Más creativo</li>
-    </ul>
-  </section>
-
-  <!-- Votación -->
-  <section id="votacion" class="seccion" style="display:none;">
-    <h2>Votación</h2>
-    <p>Selecciona tus nominados y haz clic en "VOTAR"</p>
-
-    <div class="categoria">
-      <h3>Mejor amigo</h3>
-      <button class="voto" data-categoria="Mejor amigo" data-nominado="Asieras">Asieras</button>
-      <button class="voto" data-categoria="Mejor amigo" data-nominado="Rulillas">Rulillas</button>
-      <button class="voto" data-categoria="Mejor amigo" data-nominado="Darawayas">Darawayas</button>
-    </div>
-
-    <div class="categoria">
-      <h3>Más divertido</h3>
-      <button class="voto" data-categoria="Más divertido" data-nominado="Asieras">Asieras</button>
-      <button class="voto" data-categoria="Más divertido" data-nominado="Rulillas">Rulillas</button>
-      <button class="voto" data-categoria="Más divertido" data-nominado="Darawayas">Darawayas</button>
-    </div>
-
-    <div class="categoria">
-      <h3>Más creativo</h3>
-      <button class="voto" data-categoria="Más creativo" data-nominado="Asieras">Asieras</button>
-      <button class="voto" data-categoria="Más creativo" data-nominado="Rulillas">Rulillas</button>
-      <button class="voto" data-categoria="Más creativo" data-nominado="Darawayas">Darawayas</button>
-    </div>
-
-    <br>
-    <button id="enviarVoto">VOTAR</button>
-  </section>
-
-  <script src="script.js"></script>
-</body>
-</html>
