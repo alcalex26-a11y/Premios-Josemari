@@ -28,22 +28,40 @@
 
 <!-- INICIO -->
 <header class="hero seccion" id="inicio">
-    <div class="shine"></div>
-    <div class="hero-inner">
-      <div class="hero-texto">
-        <span class="badge">JOSEMARI 2025</span>
-        <h1>Bienvenido a los Premios Josemari 2025</h1>
-        <p class="subtitle">Esta es la web oficial de los Premios de este año ¡Haz que tu voto cuente!</p>
-        <div class="cta">
-          <button class="btn gold" onclick="mostrarSeccion('votacion')">Votar ahora</button>
-          <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
-        </div>
-      </div>
-      <div class="hero-imagen">
-        <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
+  <div class="shine"></div>
+
+  <!-- Columna izquierda -->
+  <div class="fotos-lateral izquierda">
+    <img src="fotos/Lagunas.png" alt="">
+    <img src="fotos/Lodres.jpeg" alt="">
+    <img src="fotos/Zurra.jpeg" alt="">
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-texto">
+      <span class="badge">JOSEMARI 2025</span>
+      <h1>Bienvenido a los Premios Josemari 2025</h1>
+      <p class="subtitle">Esta es la web oficial de los Premios de este año ¡Haz que tu voto cuente!</p>
+      <div class="cta">
+        <button class="btn gold" onclick="mostrarSeccion('votacion')">Votar ahora</button>
+        <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
       </div>
     </div>
-  </header>
+
+    <div class="hero-imagen">
+      <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
+    </div>
+  </div>
+
+  <!-- Columna derecha -->
+  <div class="fotos-lateral derecha">
+    <img src="fotos/fin_año.jpeg" alt="">
+    <img src="fotos/Playa.jpeg" alt="">
+    <img src="fotos/Carnaval.jpeg" alt="">
+  </div>
+</header>
+
+
   
 
   <main>
@@ -107,15 +125,142 @@
   
 
 
-    <!-- CATEGORÍAS -->
-    <section id="categorias" class="seccion">
-      <h2>Categorías</h2>
-      <ul style="list-style: none; padding-left: 0; font-size: 1.1em;">
-        <li>🏆 Mejor amigo</li>
-        <li>😂 Más divertido</li>
-        <li>🎨 Más creativo</li>
-      </ul>
-    </section>
+<!-- CATEGORÍAS -->
+<section id="categorias" class="seccion">
+  <h2>Categorías</h2>
+  <div class="grid-participantes">
+    <div class="categoria" data-descripcion="Boracho del Año: La persona que mas se ha puesto hasta el culo en todo el año, nose si tanto como en la foto porque vaya cogorza lleva mi colegon el reparte melones, asi da gusto, esta categoria es para los valientes y para los que le echan cojones ostia">
+      <img src="fotos/borracho.png" alt="Borracho del año">
+      <h3> Borracho del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Fiestero del Año: ¡Siempre listo para la fiesta! Donde hay música y diversión, ahí está él/ella, contagiando alegría y buena vibra a todos">
+      <img src="fotos/fiestero.png" alt="Fiestero del año">
+      <h3> Fiestero del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Video del Año: Ese clip que todos vimos mil veces, que nos hizo reír, sorprendernos o simplemente recordar un momento épico. ¡Imposible olvidarlo!">
+      <img src="fotos/viajero.jpg" alt="Viejero del año">
+      <h3> Viejero del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Palabras del Año: La palabra perfecta, el comentario más épico o el dicho que todos recuerdan. ¡Lo que hace historia!">
+      <img src="fotos/" alt="Palabra del año">
+      <h3> Palabra/Frase del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Trío del Año: Ese grupo inseparable que siempre está junto, causando risas, travesuras y momentos inolvidables. ¡Tres veces más diversión!">
+      <img src="fotos/trio.jpg" alt="trio del año">
+      <h3> Trio del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Mejor Personaje fuera de JYP: Esa persona fuera del grupo que brilla por su estilo único y carisma, dejando huella allá donde va. ¡Imposible no recordarla">
+      <img src="fotos/mpersonaje.jpg" alt="Mejor Personaje fuera de JyP">
+      <h3> Mejor Personaje fuera de JyP</h3>
+    </div>
+    <div class="categoria" data-descripcion="Fiesta del Año: La celebración que nadie quiere perderse: música, risas y momentos épicos garantizados. ¡Memorable de principio a fin!">
+      <img src="fotos/fiesta.jpg" alt="Fiesta del año">
+      <h3> Fiesta del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Autistada del Año: Esa persona que destaca por su intensidad, originalidad y pasión en hacer la mayor autistada del año. ¡Siempre dejando su marca única!">
+      <img src="fotos/autistada.png" alt="Autistada del año">
+      <h3> Autistada del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Broma del Año: Ese momento que nos hizo reír hasta doler la panza y que todos recordaremos por siempre. ¡Risas garantizadas!">
+      <img src="fotos/broma.png" alt="Broma del año">
+      <h3> Broma del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Foto del Año: La captura que lo dice todo: momentos épicos, caras inolvidables y pura vibra. ¡Inmortalizada para la historia!">
+      <img src="fotos/foto.png" alt="Foto del año">
+      <h3> Foto del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Video del Año: Ese clip que todos vimos mil veces, que nos hizo reír, sorprendernos o simplemente recordar un momento épico. ¡Imposible olvidarlo!">
+      <img src="fotos/video.jpg" alt="Video del año">
+      <h3> Video del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Mote del Año: Ese apodo que se quedó pegado, nos hizo reír y define a la perfección a su dueño. ¡Imposible no llamarlo así!">
+      <img src="fotos/mote.png" alt="Mote del año">
+      <h3> Mote del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Más Guarro: Esa persona que no tiene filtros, dice lo que piensa y vive la vida sin vergüenza. ¡Sin miedo y sin censura!">
+      <img src="fotos/guarrete.png" alt="Guarrete del año">
+      <h3> Guarrete del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Fail del Año: Ese momento épico que salió todo mal… pero nos hizo reír a carcajadas. ¡Un clásico que nunca olvidaremos!">
+      <img src="fotos/fail.jpg" alt="Fail del año">
+      <h3> Fail del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Mejor Momento del Año: Ese instante que nos hizo sonreír, celebrar o simplemente sentir que todo valió la pena. ¡Pura magia!">
+      <img src="fotos/m.png" alt="Mejor Momento del año">
+      <h3> Mejor momento del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Meme del Año: Ese momento convertido en imagen que nos hizo reír una y otra vez. ¡Imposible olvidarlo!">
+      <img src="fotos/meme.jpg" alt="Meme del año">
+      <h3> Meme del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Braihot del Año: Esa persona que siempre sorprende con ideas locas, ocurrencias épicas y creatividad sin límites. ¡Pura genialidad rebelde!">
+      <img src="fotos/braihot.jpg" alt="Braihot del año">
+      <h3> Braihot del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Correa del Año: La persona que siempre quiere hacer de todo… pero su pareja no la deja ni respirar">
+      <img src="fotos/correon.png" alt="Correon del año">
+      <h3> Correon del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Objeto del Año: Ese accesorio o cosa que se volvió protagonista, usado, recordado o mencionado por todos. ¡El verdadero ícono del grupo!">
+      <img src="fotos/objeto.jpg" alt="Objeto del año">
+      <h3> Objeto del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Loco del Año: Esa persona que siempre rompe esquemas con ocurrencias inesperadas, locuras épicas y energía sin fin. ¡Nunca sabes qué esperar!">
+      <img src="fotos/loco.jpg" alt="Loco del año">
+      <h3> Loco del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Mejor Vestido del Año: Siempre con estilo impecable, marcando tendencia y robándose miradas. ¡El icono fashion del grupo!">
+      <img src="fotos/mejorviste.png" alt="El que mejor viste del año">
+      <h3> El que mejor viste del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Peor Momento del Año: Ese instante que todos quisimos borrar, pero que terminó siendo parte de la historia.">
+      <img src="fotos/peor_m.png" alt="Peor momento del año">
+      <h3> Peor momento del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Papi/Mami del Año: La persona que se preocupa por todos, cuida, aconseja y siempre está al pendiente del grupo. ¡Nuestro ángel guardián">
+      <img src="fotos/papi.jpg" alt="Papi/Mami del año">
+      <h3> Papi/Mami del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Competitivo del Año: Siempre buscando ganar en todo, desde juegos hasta bromas. ¡No conoce la palabra rendirse!">
+      <img src="fotos/competitivo.png" alt="Competitivo del año">
+      <h3> Competitivo del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Mensaje del Año: Ese chat que se volvió legendario, ya sea por hacerlo reír, sorprender o quedar grabado en la memoria del grupo.">
+      <img src="fotos/fiestero.png" alt="Mensaje del año">
+      <h3> Mensaje del año</h3>
+    </div>
+    <div class="categoria" data-descripcion="Premio a la persona más divertida.">
+      <img src="fotos/fiestero.png" alt="FIestero del año">
+      <h3> FIestero del año</h3>
+    </div>    <div class="categoria" data-descripcion="Premio a la persona más divertida.">
+      <img src="fotos/fiestero.png" alt="FIestero del año">
+      <h3> FIestero del año</h3>
+    </div>    <div class="categoria" data-descripcion="Decepción del Año: Esa persona que nos falló o nos sorprendió para mal, dejándonos con cara de “no me lo esperaba”.">
+      <img src="fotos/decepcion.jpg" alt="Decepción del año">
+      <h3> Decepción del año</h3>
+    </div>    <div class="categoria" data-descripcion="Revelación del Año: Esa persona que sorprendió a todos con su talento, carisma o estilo. ¡Nadie la vio venir y ahora todos hablan de ella!">
+      <img src="fotos/revelacion.png" alt="Revelación del año">
+      <h3> Revelación del año</h3>
+    </div>    <div class="categoria" data-descripcion="MVP: La persona que se lleva todos los aplausos, siempre destacando y dejando huella. ¡Imparable y digno de ovación!">
+      <img src="fotos/mvp.png" alt="MVP del año">
+      <h3> MVP del año</h3>
+    </div>
+  </div>
+</section>
+
+<!-- Modal para mostrar categoría -->
+<div id="modalCategoria" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar">&times;</span>
+    <div class="modal-body">
+      <img id="modalImagenCategoria" src="" alt="">
+      <div class="modal-texto">
+        <p id="modalDescripcionCategoria"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- VOTACIÓN -->
     <section id="votacion" class="seccion" style="display:none;">
@@ -154,7 +299,7 @@
     </section>
 
     <section id="votacion-nominados" class="seccion" style="display:none;">
-      <h2>Fiester@ del año</h2>
+      <h2>Fiestero/a del año</h2>
       <p>Selecciona hasta <strong>3</strong> candidatos.</p>
       <div id="lista-nominados-1" class="grid-nominados"></div>
     
@@ -196,8 +341,12 @@
         <!-- Botones de borrado SOLO visibles aquí -->
         <button id="borrarVotos" class="btn red" style="margin-top:15px;">Borrar todos los votos</button>
         <button id="borrarNominaciones" class="btn red" style="margin-top:15px;">Borrar todas las nominaciones</button>
+    
+        <!-- Nuevo botón para restaurar votaciones -->
+        <button id="restaurarVotaciones" class="btn gold" style="margin-top:15px;">Restaurar votaciones</button>
       </div>
     </section>
+    
     
 
     
@@ -307,74 +456,104 @@
       });
     }
     
-    // =========================
-    // NOMINACIONES CON BOTÓN ÚNICO
-    // =========================
-    const nominacionesPorCategoria = {};
-    
-    function crearApartadoNominaciones(idLista, categoriaNombre) {
-      const contenedor = document.getElementById(idLista);
-      const participantes = document.querySelectorAll('#participantes .participante');
-      nominacionesPorCategoria[categoriaNombre] = [];
-    
-      participantes.forEach(part => {
-        const nombre = part.querySelector('h3').innerText.trim();
-        const foto = part.querySelector('img').src;
-        const div = document.createElement('div');
-        div.classList.add('nominado');
-        div.dataset.nombre = nombre;
-        div.innerHTML = `<img src="${foto}" alt="${nombre}"><span>${nombre}</span>`;
-        contenedor.appendChild(div);
-      });
-    
-      const maxSeleccion = 3;
-      contenedor.querySelectorAll('.nominado').forEach(item => {
-        item.addEventListener('click', () => {
-          const nombre = item.dataset.nombre;
-          if (item.classList.contains('selected')) {
-            item.classList.remove('selected');
-            nominacionesPorCategoria[categoriaNombre] =
-              nominacionesPorCategoria[categoriaNombre].filter(n => n !== nombre);
-          } else {
-            if (nominacionesPorCategoria[categoriaNombre].length >= maxSeleccion) {
-              alert(`Solo puedes seleccionar ${maxSeleccion} nominados en esta categoría.`);
-              return;
-            }
-            item.classList.add('selected');
-            nominacionesPorCategoria[categoriaNombre].push(nombre);
-          }
-        });
-      });
-    }
-    
-    document.getElementById('enviarTodasNominaciones').addEventListener('click', async () => {
-      for (const categoria in nominacionesPorCategoria) {
-        if (nominacionesPorCategoria[categoria].length === 0) {
-          alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
+  // =========================
+// NOMINACIONES CON BOTÓN ÚNICO
+// =========================
+const nominacionesPorCategoria = {};
+
+// Función para crear cada apartado de nominaciones
+function crearApartadoNominaciones(idLista, categoriaNombre) {
+  const contenedor = document.getElementById(idLista);
+  const participantes = document.querySelectorAll('#participantes .participante');
+  nominacionesPorCategoria[categoriaNombre] = [];
+
+  participantes.forEach(part => {
+    const nombre = part.querySelector('h3').innerText.trim();
+    const foto = part.querySelector('img').src;
+    const div = document.createElement('div');
+    div.classList.add('nominado');
+    div.dataset.nombre = nombre;
+    div.innerHTML = `<img src="${foto}" alt="${nombre}"><span>${nombre}</span>`;
+    contenedor.appendChild(div);
+  });
+
+  const maxSeleccion = 3;
+  contenedor.querySelectorAll('.nominado').forEach(item => {
+    item.addEventListener('click', () => {
+      const nombre = item.dataset.nombre;
+      if (item.classList.contains('selected')) {
+        item.classList.remove('selected');
+        nominacionesPorCategoria[categoriaNombre] =
+          nominacionesPorCategoria[categoriaNombre].filter(n => n !== nombre);
+      } else {
+        if (nominacionesPorCategoria[categoriaNombre].length >= maxSeleccion) {
+          alert(`Solo puedes seleccionar ${maxSeleccion} nominados en esta categoría.`);
           return;
         }
-      }
-    
-      try {
-        for (const categoria in nominacionesPorCategoria) {
-          await addDoc(collection(db, "nominaciones"), {
-            usuario: usuarioActual,
-            categoria: categoria,
-            nominados: nominacionesPorCategoria[categoria],
-            fecha: serverTimestamp()
-          });
-        }
-        alert("¡Todas tus nominaciones han sido registradas!");
-        document.querySelectorAll('.nominado').forEach(n => n.classList.remove('selected'));
-        for (const categoria in nominacionesPorCategoria) {
-          nominacionesPorCategoria[categoria] = [];
-        }
-      } catch (e) {
-        console.error("Error guardando nominaciones: ", e);
-        alert("Hubo un error al guardar tus nominaciones.");
+        item.classList.add('selected');
+        nominacionesPorCategoria[categoriaNombre].push(nombre);
       }
     });
-    
+  });
+}
+
+// Comprobar si ya ha votado (bloqueo básico en navegador)
+if (localStorage.getItem('nominacionesEnviadas') === 'true') {
+  document.getElementById('enviarTodasNominaciones').disabled = true;
+  document.getElementById('enviarTodasNominaciones').innerText = "Ya has enviado tus nominaciones";
+}
+
+document.getElementById('enviarTodasNominaciones').addEventListener('click', async () => {
+
+  // Si ya ha votado, no permitir
+  if (localStorage.getItem('nominacionesEnviadas') === 'true') {
+    alert("Ya has enviado tus nominaciones. No puedes votar de nuevo.");
+    return;
+  }
+
+  // Pedir nombre
+  const nombreVotante = prompt("Introduce tu nombre para registrar el voto:");
+  if (!nombreVotante || nombreVotante.trim() === "") {
+    alert("Debes introducir tu nombre para enviar las nominaciones.");
+    return;
+  }
+
+  // Comprobar que en todas las categorías hay al menos un nominado
+  for (const categoria in nominacionesPorCategoria) {
+    if (nominacionesPorCategoria[categoria].length === 0) {
+      alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
+      return;
+    }
+  }
+
+  try {
+    // Guardar en base de datos
+    for (const categoria in nominacionesPorCategoria) {
+      await addDoc(collection(db, "nominaciones"), {
+        usuario: nombreVotante.trim(),
+        categoria: categoria,
+        nominados: nominacionesPorCategoria[categoria],
+        fecha: serverTimestamp()
+      });
+    }
+
+    // Marcar como enviado para bloquear futuros votos
+    localStorage.setItem('nominacionesEnviadas', 'true');
+    document.getElementById('enviarTodasNominaciones').disabled = true;
+    document.getElementById('enviarTodasNominaciones').innerText = "Ya has enviado tus nominaciones";
+
+    alert("¡Todas tus nominaciones han sido registradas!");
+    document.querySelectorAll('.nominado').forEach(n => n.classList.remove('selected'));
+    for (const categoria in nominacionesPorCategoria) {
+      nominacionesPorCategoria[categoria] = [];
+    }
+
+  } catch (e) {
+    console.error("Error guardando nominaciones: ", e);
+    alert("Hubo un error al guardar tus nominaciones.");
+  }
+});
+
     // =========================
     // RESULTADOS CON LOGIN ADMIN
     // =========================
@@ -393,46 +572,70 @@
         document.getElementById('loginError').style.display = 'block';
       }
     });
-    
     async function cargarResultados() {
-      const contenedor = document.getElementById('tabla-resultados');
-      contenedor.innerHTML = "<p>Cargando resultados...</p>";
-    
-      try {
-        const q = query(collection(db, "nominaciones"));
-        const snapshot = await getDocs(q);
-    
-        const conteo = {};
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const categoria = data.categoria || "Sin categoría";
-          if (!conteo[categoria]) conteo[categoria] = {};
-          data.nominados.forEach(nombre => {
-            if (!conteo[categoria][nombre]) conteo[categoria][nombre] = 0;
-            conteo[categoria][nombre]++;
-          });
-        });
-    
-        contenedor.innerHTML = "";
-        for (const categoria in conteo) {
-          const bloque = document.createElement('div');
-          bloque.innerHTML = `<h4>${categoria}</h4>`;
-          const lista = document.createElement('ul');
-          Object.entries(conteo[categoria])
-            .sort((a, b) => b[1] - a[1])
-            .forEach(([nombre, votos]) => {
-              const li = document.createElement('li');
-              li.textContent = `${nombre}: ${votos} votos`;
-              lista.appendChild(li);
-            });
-          bloque.appendChild(lista);
-          contenedor.appendChild(bloque);
-        }
-      } catch (e) {
-        console.error("Error cargando resultados:", e);
-        contenedor.innerHTML = "<p>Error al cargar resultados.</p>";
+  const contenedor = document.getElementById('tabla-resultados');
+  contenedor.innerHTML = "<p>Cargando resultados...</p>";
+
+  try {
+    const q = query(collection(db, "nominaciones"));
+    const snapshot = await getDocs(q);
+
+    const conteo = {};
+    const votantes = new Set(); // para guardar nombres únicos
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const categoria = data.categoria || "Sin categoría";
+
+      // Guardar el nombre del votante
+      if (data.usuario) {
+        votantes.add(data.usuario);
       }
+
+      // Contar votos por categoría
+      if (!conteo[categoria]) conteo[categoria] = {};
+      data.nominados.forEach(nombre => {
+        if (!conteo[categoria][nombre]) conteo[categoria][nombre] = 0;
+        conteo[categoria][nombre]++;
+      });
+    });
+
+    // Limpiar contenedor
+    contenedor.innerHTML = "";
+
+    // Mostrar lista de votantes arriba del todo
+    if (votantes.size > 0) {
+      const bloqueVotantes = document.createElement('div');
+      bloqueVotantes.innerHTML = `
+        <h4>Personas que han votado:</h4>
+        <p>${Array.from(votantes).join(', ')}</p>
+      `;
+      contenedor.appendChild(bloqueVotantes);
     }
+
+    // Mostrar resultados por categoría
+    for (const categoria in conteo) {
+      const bloque = document.createElement('div');
+      bloque.innerHTML = `<h4>${categoria}</h4>`;
+      const lista = document.createElement('ul');
+      Object.entries(conteo[categoria])
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([nombre, votos]) => {
+          const li = document.createElement('li');
+          li.textContent = `${nombre}: ${votos} votos`;
+          lista.appendChild(li);
+        });
+      bloque.appendChild(lista);
+      contenedor.appendChild(bloque);
+    }
+
+  } catch (e) {
+    console.error("Error cargando resultados:", e);
+    contenedor.innerHTML = "<p>Error al cargar resultados.</p>";
+  }
+}
+
+
 
     // Opcional: arrancar en Inicio
     mostrarSeccion('inicio');
@@ -470,6 +673,44 @@ document.getElementById('borrarVotos').addEventListener('click', () => {
 document.getElementById('borrarNominaciones').addEventListener('click', () => {
   borrarColeccion("nominaciones");
 });
+
+// Botón para restaurar votaciones
+document.getElementById('restaurarVotaciones').addEventListener('click', () => {
+  if (confirm("¿Seguro que quieres permitir que todos puedan volver a votar?")) {
+    // Elimina la marca de bloqueo en este navegador
+    localStorage.removeItem('nominacionesEnviadas');
+    localStorage.removeItem('votoEnviado'); // por si usas otra clave para votos
+
+    alert("Se ha restaurado la posibilidad de votar en este navegador. Si quieres que todos puedan votar de nuevo, recuerda que este botón solo afecta al bloqueo local; para un desbloqueo global tendrías que borrar los registros en la base de datos.");
+  }
+});
+
+
+// Modal de categorías
+const modalCategoria = document.getElementById("modalCategoria");
+const modalImgCat = document.getElementById("modalImagenCategoria");
+const modalDescCat = document.getElementById("modalDescripcionCategoria");
+const cerrarCat = modalCategoria.querySelector(".cerrar");
+
+// Abrir modal al hacer clic en una categoría
+document.querySelectorAll(".categoria").forEach(cat => {
+  cat.addEventListener("click", () => {
+    modalImgCat.src = cat.querySelector("img").src;
+    modalDescCat.textContent = cat.dataset.descripcion;
+    modalCategoria.style.display = "block";
+  });
+});
+
+// Cerrar modal
+cerrarCat.addEventListener("click", () => {
+  modalCategoria.style.display = "none";
+});
+window.addEventListener("click", (e) => {
+  if (e.target === modalCategoria) {
+    modalCategoria.style.display = "none";
+  }
+});
+
 
   </script>
 

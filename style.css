@@ -83,11 +83,11 @@ h1 {
     background: #1a1a1a;
     color: white;
     margin: 10% auto;
-    padding: 20px;              /* un poco más de relleno */
+    padding: 10px;              /* un poco más de relleno */
     border: 2px solid gold;
     border-radius: 10px;
     width: 90%;                 /* ocupa más ancho relativo */
-    max-width: 420px;           /* antes 300px o 320px, ahora más grande */
+    max-width: 1500px;           /* antes 300px o 320px, ahora más grande */
   }
   
   .modal-body {
@@ -97,8 +97,8 @@ h1 {
   }
   
   .modal-body img {
-    width: 110px;               /* antes 70px u 80px */
-    height: 110px;
+    width: 400px;               /* antes 70px u 80px */
+    height: 400px;
     object-fit: cover;
     border-radius: 8px;
     border: 2px solid gold;
@@ -106,11 +106,17 @@ h1 {
   
   .cerrar {
     float: right;
-    font-size: 22px;
+    font-size: 100px;
     font-weight: bold;
     color: gold;
     cursor: pointer;
   }
+  /* Texto de descripción en el modal */
+.modal-texto p {
+  font-size: 1.4rem;   /* más grande que el tamaño base */
+  line-height: 1.6;    /* más espacio entre líneas para legibilidad */
+}
+
   
   .cerrar:hover { color: red; }
   
@@ -282,17 +288,6 @@ footer {
     width: 100%;
   }
   
-  .hero-imagen {
-    flex-shrink: 0;
-    margin-left: auto;    /* empuja la imagen a la derecha */
-  }
-  
-  .hero-imagen img {
-    max-width: 500px;     /* ajusta tamaño */
-    width: 100%;
-    height: auto;
-    display: block;
-  }
   .hero {
     padding-right: 0; /* sin relleno a la derecha */
   }
@@ -335,7 +330,7 @@ footer {
   #votacion-nominados2 {
     display: block;
   }
-  /* ====== RESPONSIVE ====== */
+/* ====== RESPONSIVE MÓVIL ====== */
 @media (max-width: 768px) {
   /* NAV */
   .nav-inner {
@@ -351,27 +346,6 @@ footer {
   .nav-actions .btn {
     flex: 1 1 calc(50% - 6px);
     text-align: center;
-  }
-
-  /* HERO */
-  .hero-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* antes space-between */
-    gap: 20px;
-    padding: 0;
-    margin: 0 auto; /* centra el contenedor */
-    width: 100%;
-    max-width: 1100px; /* límite para que no se estire demasiado */
-  }
-  
-  .hero-imagen {
-    flex-shrink: 0;
-    margin-left: 0; /* antes auto */
-  }
-  
-  .hero-imagen img {
-    max-width: 100%;
   }
 
   /* TITULOS */
@@ -395,36 +369,155 @@ footer {
     width: 100%;
     padding: 10px;
   }
-  @media (max-width: 768px) {
-    .hero-inner {
-      flex-direction: column;
-      text-align: center;
-    }
-    .hero-imagen img {
-      max-width: 90%;
-      margin: 0 auto;
-    }
-    /* Participantes más pequeños en móvil */
-.grid-participantes {
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* antes 120px */
-}
-.participante img {
-  height: 120px; /* antes 160px */
-}
 
-/* Nominados más pequeños en móvil */
-.grid-nominados {
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* antes 120px */
-}
-.nominado img {
-  width: 80%; /* antes 90% */
-}
-.nominado {
-  padding: 6px; /* menos padding para que se vea más compacto */
-}
-
+  /* Nominados más pequeños en móvil */
+  .grid-nominados {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
-  
+  .nominado img {
+    width: 80%;
+  }
+  .nominado {
+    padding: 6px;
+  }
 }
+
+/* ====== RESPONSIVE ESCRITORIO ====== */
+/* ====== Imagen del hero ====== */
+/* Tamaño por defecto (móvil/tablet) */
+.hero-imagen img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 250px; /* tamaño en móvil/tablet */
+}
+
+/* En escritorio, reducir */
+@media (min-width: 1024px) {
+  .hero-imagen img {
+    max-width: 2000px; /* tamaño reducido en pantallas grandes */
+  }
+}
+
+/* ====== HERO centrado y equilibrado ====== */
+/* Hero en columna: texto arriba, imagen abajo */
+.hero-inner {
+  display: flex;
+  flex-direction: column; /* apila texto e imagen */
+  align-items: center;    /* centra horizontalmente */
+  text-align: center;     /* centra el texto */
+  gap: 30px;              /* espacio entre texto e imagen */
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Texto más grande */
+.hero-texto h1 {
+  font-size: clamp(48px, 6vw, 80px); /* más grande que antes */
+  line-height: 1.1;
+}
+
+.hero-texto .subtitle {
+  font-size: clamp(20px, 2.5vw, 28px); /* subtítulo más grande */
+  max-width: 800px;
+}
+
+/* Botones más grandes */
+.hero-texto .btn {
+  font-size: 1.1rem;
+  padding: 16px 28px;
+  border-radius: 12px;
+}
+
+/* Imagen centrada y tamaño controlado */
+.hero-imagen img {
+  width: 100%;
+  height: auto;
+  max-width: 700px; /* ajusta este valor a tu gusto */
+  display: block;
+}
+
+/* En móvil, apilar y centrar */
+@media (max-width: 768px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+  .hero-texto {
+    max-width: 100%;
+  }
+  .hero-imagen img {
+    max-width: 250px;
+  }
+}
+.fotos-lateral {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1; /* delante del fondo pero detrás del texto */
+}
+
+.fotos-lateral img {
+  width: 330px;              /* ancho fijo */
+  height: 300px;             /* alto fijo */
+  object-fit: cover;        /* recorta para que no se deforme */
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.fotos-lateral.izquierda {
+  left: 10px;
+}
+
+.fotos-lateral.derecha {
+  right: 10px;
+}
+
+/* Ocultar en móvil para no saturar */
+@media (max-width: 768px) {
+  .fotos-lateral {
+    display: none;
+  }
+}
+.categoria {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,215,0,0.6);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.categoria:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255,215,0,0.8);
+}
+
+.categoria img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 2px solid var(--gold);
+}
+
+.categoria h3 {
+  color: var(--gold);
+}
+
+
+
+  
+
+
+
 
   
