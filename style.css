@@ -512,6 +512,37 @@ footer {
 .categoria h3 {
   color: var(--gold);
 }
+/* ====== MODAL: ESTILOS SOLO PARA MÓVIL ====== */
+@media (max-width: 768px) {
+  .modal-contenido {
+    max-width: 90%;      /* Ancho relativo grande, pero no extremo */
+    margin: 5% auto;     /* Centrado vertical con algo de espacio */
+    padding: 12px;       /* Menos padding que en desktop */
+  }
+
+  .modal-body {
+    flex-direction: column; /* Apilar imagen y texto */
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-body img {
+    width: 100%;         /* Imagen al ancho completo del modal */
+    height: auto;
+    max-width: 300px;    /* Para no reventar en horizontales pequeñas */
+  }
+
+  .modal-texto p {
+    font-size: 1rem;     /* Tamaño controlado en móvil */
+    line-height: 1.4;
+  }
+
+  .cerrar {
+    font-size: 32px;     /* Cruz más pequeña */
+    top: 8px;
+    right: 12px;
+  }
+}
 
 
 
