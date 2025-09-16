@@ -10,6 +10,25 @@
 </head>
 <body>
 
+<!-- LOGIN -->
+<section id="login" class="seccion" style="display:none;">
+  <h2>Iniciar sesión</h2>
+  <div style="max-width:300px; margin:0 auto; text-align:center;">
+    <input id="loginUser" type="text" placeholder="Usuario"
+           style="width:100%; padding:8px; margin:8px 0;">
+    <input id="loginPass" type="password" placeholder="Contraseña"
+           style="width:100%; padding:8px; margin:8px 0;">
+    <button id="btnLogin" class="btn gold" style="width:100%; padding:10px;">
+      Entrar
+    </button>
+    <p id="loginError" style="color:red; display:none; margin-top:10px;">
+      Usuario o contraseña incorrectos
+    </p>
+  </div>
+</section>
+
+<!-- CONTENIDO DE LA APP (oculto hasta login) -->
+<div id="appContent" style="display:none;">
 
   <!-- NAV -->
   <nav class="top">
@@ -21,48 +40,144 @@
         <button class="btn" onclick="mostrarSeccion('categorias')">Categorías</button>
         <button class="btn" onclick="mostrarSeccion('votacion')">Votar</button>
         <button class="btn" onclick="mostrarSeccion('votacion-nominados')">Votación nominados</button>
-        <button class="btn" onclick="mostrarSeccion('resultados')">Resultados</button>
+        <button id="btnResultados" class="btn" onclick="mostrarSeccion('resultados')">Resultados</button>
+      </div>
+
+      <!-- PERFIL USUARIO -->
+      <div id="perfilUsuario" class="perfil-usuario" style="display:none;">
+        <span id="nombreUsuario"></span>
+        <img id="avatarUsuario" src="" alt="Avatar"
+             style="width:40px; height:40px; border-radius:50%; margin-left:8px; border:2px solid gold;">
       </div>
     </div>
   </nav>
 
-<!-- INICIO -->
-<header class="hero seccion" id="inicio">
-  <div class="shine"></div>
+  <!-- INICIO -->
+  <header class="hero seccion" id="inicio">
+    <div class="shine"></div>
 
-  <!-- Columna izquierda -->
-  <div class="fotos-lateral izquierda">
-    <img src="fotos/Lagunas.png" alt="">
-    <img src="fotos/Lodres.jpeg" alt="">
-    <img src="fotos/Zurra.jpeg" alt="">
-  </div>
+    <!-- Columna izquierda -->
+    <div class="fotos-lateral izquierda">
+      <img src="fotos/Lagunas.png" alt="">
+      <img src="fotos/Lodres.jpeg" alt="">
+      <img src="fotos/Zurra.jpeg" alt="">
+    </div>
 
-  <div class="hero-inner">
-    <div class="hero-texto">
-      <span class="badge">JOSEMARI 2025</span>
-      <h1>Bienvenido a los Premios Josemari 2025</h1>
-      <p class="subtitle">Esta es la web oficial de los Premios de este año ¡Haz que tu voto cuente!</p>
-      <div class="cta">
-        <button class="btn gold" onclick="mostrarSeccion('votacion')">Votar ahora</button>
-        <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
+    <div class="hero-inner">
+      <div class="hero-texto">
+        <span class="badge">JOSEMARI 2025</span>
+        <h1>Bienvenido a los Premios Josemari 2025</h1>
+        <p class="subtitle">Esta es la web oficial de los Premios de este año ¡Haz que tu voto cuente!</p>
+        <div class="cta">
+          <button class="btn gold" onclick="mostrarSeccion('votacion')">Votar ahora</button>
+          <button class="btn" onclick="mostrarSeccion('participantes')">Ver participantes</button>
+        </div>
+      </div>
+
+      <div class="hero-imagen">
+        <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
       </div>
     </div>
 
-    <div class="hero-imagen">
-      <img src="fotos/ImagenJosemari.png" alt="Imagen de inicio">
+    <!-- Columna derecha -->
+    <div class="fotos-lateral derecha">
+      <img src="fotos/fin_año.jpeg" alt="">
+      <img src="fotos/Playa.jpeg" alt="">
+      <img src="fotos/Carnaval.jpeg" alt="">
     </div>
-  </div>
+  </header>
+</div>
+  <script>
+  // Usuarios válidos
+const usuariosPermitidos = {
+  Asier: { pass: "claveAsier123", avatar: "fotos/asieras.jpeg" },
+  Rulas: { pass: "claveRulas456", avatar: "fotos/rulas-avatar.png" },
+  Raul:  { pass: "claveRaul789",  avatar: "fotos/raul-avatar.png" }
+};
+function mostrarPerfil(nombre) {
+  document.getElementById("nombreUsuario").textContent = nombre;
+  document.getElementById("avatarUsuario").src = usuariosPermitidos[nombre].avatar;
+  document.getElementById("perfilUsuario").style.display = "flex";
+}
 
-  <!-- Columna derecha -->
-  <div class="fotos-lateral derecha">
-    <img src="fotos/fin_año.jpeg" alt="">
-    <img src="fotos/Playa.jpeg" alt="">
-    <img src="fotos/Carnaval.jpeg" alt="">
-  </div>
-</header>
+document.getElementById("perfilUsuario").addEventListener("click", () => {
+  if (confirm("¿Cerrar sesión?")) {
+    localStorage.removeItem("usuarioLogueado");
+    document.getElementById("perfilUsuario").style.display = "none";
+
+    // 👇 oculta todo el contenido y vuelve a mostrar el login
+    document.getElementById("appContent").style.display = "none";
+    document.getElementById("login").style.display = "block";
+  }
+});
 
 
-  
+  // Mostrar u ocultar botón Resultados según usuario
+  function controlarAccesoResultados() {
+    const user = localStorage.getItem("usuarioLogueado");
+    const btn = document.getElementById("btnResultados");
+    if (btn) btn.style.display = ["Asier","Rulas"].includes(user) ? "" : "none";
+  }
+
+  // Navegación entre secciones
+  function mostrarSeccion(seccion) {
+    const necesitaLogin = !["login","inicio","participantes","categorias"].includes(seccion);
+    const user = localStorage.getItem("usuarioLogueado");
+    if (necesitaLogin && !user) seccion = "login";
+
+    document.querySelectorAll(".seccion").forEach(s => s.style.display = "none");
+    document.getElementById(seccion).style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (seccion === "login") {
+      document.getElementById("loginError").style.display = "none";
+      document.getElementById("loginUser").value = "";
+      document.getElementById("loginPass").value = "";
+    }
+    if (seccion === "resultados") cargarResultados();
+  }
+
+  // Login
+  document.getElementById("btnLogin").addEventListener("click", () => {
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value.trim();
+if (usuariosPermitidos[user] && usuariosPermitidos[user].pass === pass) {
+  localStorage.setItem("usuarioLogueado", user);
+  mostrarPerfil(user);
+  controlarAccesoResultados();
+
+  // 👇 aquí ocultamos login y mostramos la app
+  document.getElementById("login").style.display = "none";
+  document.getElementById("appContent").style.display = "block";
+
+  mostrarSeccion("inicio");
+} else {
+  document.getElementById("loginError").style.display = "block";
+}
+
+
+
+  });
+
+window.addEventListener("DOMContentLoaded", () => {
+  const user = localStorage.getItem("usuarioLogueado");
+  if (user && usuariosPermitidos[user]) {
+    mostrarPerfil(user);
+    controlarAccesoResultados();
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("appContent").style.display = "block";
+
+    mostrarSeccion("inicio");
+  } else {
+    document.getElementById("login").style.display = "block";
+    document.getElementById("appContent").style.display = "none"; // 👈 oculta el menú y todo
+  }
+});
+
+
+</script>
+
 
   <main>
     <!-- PARTICIPANTES -->
@@ -376,16 +491,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     
-    // --- Obtener o pedir usuario ---
-    let usuarioActual = localStorage.getItem("usuario");
-    if (!usuarioActual) {
-      usuarioActual = prompt("Introduce tu nombre para votar:");
-      if (usuarioActual && usuarioActual.trim() !== "") {
-        localStorage.setItem("usuario", usuarioActual.trim());
-      } else {
-        alert("Debes introducir un nombre para poder votar.");
-      }
-    }
+
+
     
     // =========================
     // FUNCIÓN PARA CAMBIAR DE SECCIÓN
