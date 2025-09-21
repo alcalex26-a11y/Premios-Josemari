@@ -542,7 +542,20 @@ footer {
     top: 8px;
     right: 12px;
   }
+
 }
+.perfil-usuario {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  font-weight: 600;
+  cursor: pointer;
+}
+.perfil-usuario img {
+  object-fit: cover;
+}
+
 
 
 

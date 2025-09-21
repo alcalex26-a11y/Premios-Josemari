@@ -159,21 +159,27 @@ if (usuariosPermitidos[user] && usuariosPermitidos[user].pass === pass) {
 
   });
 
-window.addEventListener("DOMContentLoaded", () => {
+// =========================
+// SESIÓN RECORDADA
+// =========================
+window.addEventListener("DOMContentLoaded", async () => {
   const user = localStorage.getItem("usuarioLogueado");
   if (user && usuariosPermitidos[user]) {
     mostrarPerfil(user);
     controlarAccesoResultados();
-
     document.getElementById("login").style.display = "none";
     document.getElementById("appContent").style.display = "block";
-
     mostrarSeccion("inicio");
+
+    if (window.actualizarEstadoBotonNominaciones) {
+      await window.actualizarEstadoBotonNominaciones();
+    }
   } else {
     document.getElementById("login").style.display = "block";
-    document.getElementById("appContent").style.display = "none"; // 👈 oculta el menú y todo
+    document.getElementById("appContent").style.display = "none";
   }
 });
+
 
 
 </script>
@@ -205,26 +211,9 @@ window.addEventListener("DOMContentLoaded", () => {
 <!-- Modal para mostrar participante -->
 </div>
 </section>
-<script>
-  function mostrarSeccion(seccion) {
-    document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
-    document.getElementById(seccion).style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  
-    if (seccion === 'votacion-nominados') {
-      // Limpiar antes de rellenar para evitar duplicados
-      document.getElementById('lista-nominados-1').innerHTML = '';
-      document.getElementById('lista-nominados-2').innerHTML = '';
-  
-      crearApartadoNominaciones('lista-nominados-1', 'enviarNominados1', 'nominaciones_soltero');
-      crearApartadoNominaciones('lista-nominados-2', 'enviarNominados2', 'nominaciones_otro');
-    }
-  }
-    </script>
-  
+
   
 
-<!-- Modal fuera de la sección -->
 <!-- Modal fuera de la sección -->
 <div id="modalParticipante" class="modal">
     <div class="modal-contenido">
@@ -438,30 +427,21 @@ window.addEventListener("DOMContentLoaded", () => {
       <button id="enviarTodasNominaciones" class="btn gold">Enviar todas las nominaciones</button>
     </section>
     
-    <section id="resultados" class="seccion" style="display:none;">
-      <h2>Resultados de las votaciones</h2>
-    
-      <div id="login-admin">
-        <p>Introduce usuario y contraseña para ver los resultados:</p>
-        <input type="text" id="adminUser" placeholder="Usuario">
-        <input type="password" id="adminPass" placeholder="Contraseña">
-        <button id="loginBtn" class="btn gold">Acceder</button>
-        <p id="loginError" style="color:red; display:none;">Usuario o contraseña incorrectos</p>
-      </div>
-    
-      <div id="resultados-contenido" style="display:none;">
-        <h3>Resultados por categoría</h3>
-        <div id="tabla-resultados"></div>
-    
-        <!-- Botones de borrado SOLO visibles aquí -->
-        <button id="borrarVotos" class="btn red" style="margin-top:15px;">Borrar todos los votos</button>
-        <button id="borrarNominaciones" class="btn red" style="margin-top:15px;">Borrar todas las nominaciones</button>
-    
-        <!-- Nuevo botón para restaurar votaciones -->
-        <button id="restaurarVotaciones" class="btn gold" style="margin-top:15px;">Restaurar votaciones</button>
-      </div>
-    </section>
-    
+<section id="resultados" class="seccion" style="display:none;">
+  <h2>Resultados de las votaciones</h2>
+
+  <!-- 👇 Sin login; mostramos directamente el contenido -->
+  <div id="resultados-contenido" style="display:block;">
+    <h3>Resultados por categoría</h3>
+    <div id="tabla-resultados"></div>
+
+    <!-- Botones de gestión -->
+    <button id="borrarVotos" class="btn red" style="margin-top:15px;">Borrar todos los votos</button>
+    <button id="borrarNominaciones" class="btn red" style="margin-top:15px;">Borrar todas las nominaciones</button>
+    <button id="restaurarVotaciones" class="btn gold" style="margin-top:15px;">Restaurar votaciones</button>
+  </div>
+</section>
+
     
 
     
@@ -477,7 +457,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import {
+  getFirestore, collection, addDoc, serverTimestamp, getDocs, query, where,
+  getDoc, setDoc, updateDoc, doc, deleteDoc
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+
     
     const firebaseConfig = {
       apiKey: "AIzaSyBNfmxGA8GNgWf-N1sstPhQlWitYMjnd6M",
@@ -490,29 +475,73 @@ window.addEventListener("DOMContentLoaded", () => {
     
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    function safeIdPart(str) {
+  // Firestore no admite "/" en los IDs de documento; además dejamos robusto
+  return encodeURIComponent(String(str).replaceAll('/', '_'));
+}
+
     
+// ===== Ciclo global de votaciones (no borra nada; abre nueva ronda) =====
+const CONFIG_DOC = doc(db, "config", "estado");
+
+async function getCicloActual() {
+  const snap = await getDoc(CONFIG_DOC);
+  if (!snap.exists()) {
+    await setDoc(CONFIG_DOC, { ciclo: 1 });
+    return 1;
+  }
+  const data = snap.data();
+  return typeof data.ciclo === "number" ? data.ciclo : 1;
+}
+
+async function aumentarCiclo() {
+  const ciclo = await getCicloActual();
+  try {
+    await updateDoc(CONFIG_DOC, { ciclo: ciclo + 1 });
+  } catch {
+    await setDoc(CONFIG_DOC, { ciclo: ciclo + 1 });
+  }
+  return ciclo + 1;
+}
 
 
     
-    // =========================
-    // FUNCIÓN PARA CAMBIAR DE SECCIÓN
-    // =========================
-    window.mostrarSeccion = function (seccion) {
-      document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
-      document.getElementById(seccion).style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-      if (seccion === 'votacion-nominados') {
-        ['lista-nominados-1','lista-nominados-2','lista-nominados-3','lista-nominados-4','lista-nominados-5']
-          .forEach(id => document.getElementById(id).innerHTML = '');
-    
-        crearApartadoNominaciones('lista-nominados-1', 'Fiester@ del año');
-        crearApartadoNominaciones('lista-nominados-2', 'Borrach@ del año');
-        crearApartadoNominaciones('lista-nominados-3', 'Más guarr@ del año');
-        crearApartadoNominaciones('lista-nominados-4', 'Viajero/a');
-        crearApartadoNominaciones('lista-nominados-5', 'Otra categoría');
-      }
-    };
+
+// =========================
+// CAMBIO DE SECCIÓN (única)
+// =========================
+window.mostrarSeccion = async function (seccion) {
+  // Si la sección requiere login y no hay usuario, manda a login
+  const necesitaLogin = !["login","inicio","participantes","categorias"].includes(seccion);
+  const user = localStorage.getItem("usuarioLogueado");
+  if (necesitaLogin && !user) seccion = "login";
+
+  document.querySelectorAll('.seccion').forEach(sec => sec.style.display = 'none');
+  const destino = document.getElementById(seccion);
+  if (destino) destino.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (seccion === 'votacion-nominados') {
+    // Limpiar contenedores y volver a crear (evita duplicados)
+    ['lista-nominados-1','lista-nominados-2','lista-nominados-3','lista-nominados-4','lista-nominados-5']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+
+    crearApartadoNominaciones('lista-nominados-1', 'Fiester@ del año');
+    crearApartadoNominaciones('lista-nominados-2', 'Borrach@ del año');
+    crearApartadoNominaciones('lista-nominados-3', 'Más guarr@ del año');
+    crearApartadoNominaciones('lista-nominados-4', 'Viajero/a');
+    crearApartadoNominaciones('lista-nominados-5', 'Otra categoría');
+
+    if (window.actualizarEstadoBotonNominaciones) {
+      await window.actualizarEstadoBotonNominaciones();
+    }
+  }
+
+  if (seccion === "resultados" && typeof cargarResultados === "function") {
+    cargarResultados();
+  }
+};
+
     
     // =========================
     // VOTACIÓN NORMAL
@@ -544,12 +573,38 @@ window.addEventListener("DOMContentLoaded", () => {
         try {
           enviarBtn.disabled = true;
           for (let cat of categorias) {
-            await addDoc(collection(db, "votos"), {
-              usuario: usuarioActual,
-              categoria: cat,
-              nominado: votosSeleccionados[cat],
-              fecha: serverTimestamp()
-            });
+async function guardarVoto(categoria, opcionElegida) {
+  const usuario = localStorage.getItem("usuarioLogueado"); // 👈 quién está logueado
+  await addDoc(collection(db, "votaciones"), {
+    usuario: usuario,
+    categoria: categoria,
+    voto: opcionElegida,
+    timestamp: serverTimestamp()
+  });
+  async function votar(categoria, opcionElegida) {
+  const usuario = localStorage.getItem("usuarioLogueado");
+
+  // 1) Comprobar si ya votó este usuario en esta categoría
+  const q = query(
+    collection(db, "votaciones"),
+    where("usuario", "==", usuario),
+    where("categoria", "==", categoria)
+  );
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    alert("Ya has votado en esta categoría");
+    return;
+  }
+
+  // 2) Guardar el voto
+  await guardarVoto(categoria, opcionElegida);
+  alert("Voto registrado correctamente");
+}
+
+}
+
+
           }
           alert("¡Tus votos han sido registrados!");
           localStorage.removeItem("usuario");
@@ -563,12 +618,11 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
     
-  // =========================
-// NOMINACIONES CON BOTÓN ÚNICO
+// =========================
+// NOMINACIONES POR USUARIO
 // =========================
 const nominacionesPorCategoria = {};
 
-// Función para crear cada apartado de nominaciones
 function crearApartadoNominaciones(idLista, categoriaNombre) {
   const contenedor = document.getElementById(idLista);
   const participantes = document.querySelectorAll('#participantes .participante');
@@ -604,113 +658,207 @@ function crearApartadoNominaciones(idLista, categoriaNombre) {
   });
 }
 
-// Comprobar si ya ha votado (bloqueo básico en navegador)
-if (localStorage.getItem('nominacionesEnviadas') === 'true') {
-  document.getElementById('enviarTodasNominaciones').disabled = true;
-  document.getElementById('enviarTodasNominaciones').innerText = "Ya has enviado tus nominaciones";
+async function yaHaEnviadoNominaciones(usuario) {
+  if (!usuario) return false;
+  const ciclo = await getCicloActual();
+
+  // Firestore: ¿ya envió en este ciclo?
+  const q = query(
+    collection(db, "nominaciones"),
+    where("usuario", "==", usuario),
+    where("ciclo", "==", ciclo)
+  );
+  const snap = await getDocs(q);
+  if (!snap.empty) return true;
+
+  // Local (opcional) por usuario+ciclo
+  return localStorage.getItem(`nominacionesEnviadas_${usuario}_${ciclo}`) === "true";
 }
 
-document.getElementById('enviarTodasNominaciones').addEventListener('click', async () => {
+async function marcarEnviadoLocal(usuario) {
+  if (!usuario) return;
+  const ciclo = await getCicloActual();
+  localStorage.setItem(`nominacionesEnviadas_${usuario}_${ciclo}`, "true");
+}
 
-  // Si ya ha votado, no permitir
-  if (localStorage.getItem('nominacionesEnviadas') === 'true') {
-    alert("Ya has enviado tus nominaciones. No puedes votar de nuevo.");
-    return;
-  }
+// ---------- Botón Enviar todas ----------
+const btnEnviarTodas = document.getElementById('enviarTodasNominaciones');
 
-  // Pedir nombre
-  const nombreVotante = prompt("Introduce tu nombre para registrar el voto:");
-  if (!nombreVotante || nombreVotante.trim() === "") {
-    alert("Debes introducir tu nombre para enviar las nominaciones.");
-    return;
-  }
+// por si el botón ya existe ahora
+if (btnEnviarTodas && !btnEnviarTodas.dataset.bound) {
+  btnEnviarTodas.dataset.bound = "1";
+  btnEnviarTodas.addEventListener('click', onEnviarTodasNominaciones);
+}
 
-  // Comprobar que en todas las categorías hay al menos un nominado
-  for (const categoria in nominacionesPorCategoria) {
-    if (nominacionesPorCategoria[categoria].length === 0) {
-      alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
-      return;
-    }
+
+
+let enviandoNominaciones = false;
+
+async function onEnviarTodasNominaciones(e) {
+  e.preventDefault();
+
+  if (enviandoNominaciones) return;       // ⛔ evita reentrada
+  enviandoNominaciones = true;
+
+  const btn = document.getElementById('enviarTodasNominaciones');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = "Enviando…";
   }
 
   try {
-    // Guardar en base de datos
-    for (const categoria in nominacionesPorCategoria) {
-      await addDoc(collection(db, "nominaciones"), {
-        usuario: nombreVotante.trim(),
-        categoria: categoria,
-        nominados: nominacionesPorCategoria[categoria],
-        fecha: serverTimestamp()
-      });
+    const usuario = localStorage.getItem('usuarioLogueado');
+    if (!usuario) { 
+      alert("Debes iniciar sesión para enviar nominaciones."); 
+      mostrarSeccion('login'); 
+      return;
     }
 
-    // Marcar como enviado para bloquear futuros votos
-    localStorage.setItem('nominacionesEnviadas', 'true');
-    document.getElementById('enviarTodasNominaciones').disabled = true;
-    document.getElementById('enviarTodasNominaciones').innerText = "Ya has enviado tus nominaciones";
+    // Validación como ya tienes…
+    for (const categoria in nominacionesPorCategoria) {
+      if (nominacionesPorCategoria[categoria].length === 0) {
+        alert(`Debes seleccionar al menos un nominado en la categoría: ${categoria}`);
+        return;
+      }
+    }
+const ciclo = await getCicloActual();
+
+// ✅ Escritura segura con ID saneado (sin "/")
+for (const categoria in nominacionesPorCategoria) {
+  const id = `${safeIdPart(usuario)}__${safeIdPart(categoria)}__${ciclo}`;
+  await setDoc(doc(db, "nominaciones", id), {
+    usuario,                      // guardamos el nombre original tal cual
+    categoria,                    // idem
+    nominados: nominacionesPorCategoria[categoria],
+    ciclo,
+    fecha: serverTimestamp()
+  });
+}
+
+
+
+    await marcarEnviadoLocal(usuario);
+    if (window.actualizarEstadoBotonNominaciones) {
+      await window.actualizarEstadoBotonNominaciones();
+    }
 
     alert("¡Todas tus nominaciones han sido registradas!");
     document.querySelectorAll('.nominado').forEach(n => n.classList.remove('selected'));
-    for (const categoria in nominacionesPorCategoria) {
-      nominacionesPorCategoria[categoria] = [];
-    }
+    for (const c in nominacionesPorCategoria) nominacionesPorCategoria[c] = [];
 
   } catch (e) {
-    console.error("Error guardando nominaciones: ", e);
+    console.error("Error guardando nominaciones:", e);
     alert("Hubo un error al guardar tus nominaciones.");
+  } finally {
+    enviandoNominaciones = false;
+
+    }
   }
-});
+
+
+
+async function actualizarEstadoBotonNominaciones() {
+  const usuario = localStorage.getItem('usuarioLogueado');
+  const btn = document.getElementById('enviarTodasNominaciones');
+  if (!btn) return;
+
+  if (!usuario) {
+    btn.disabled = true;
+    btn.innerText = "Inicia sesión para nominar";
+    return;
+  }
+
+  const enviado = await yaHaEnviadoNominaciones(usuario);
+  btn.disabled = enviado;
+  btn.innerText = enviado
+    ? "Ya has enviado tus nominaciones"
+    : "Enviar todas las nominaciones";
+}
+
+// 👇 importante: exponerla en el global para poder llamarla desde cualquier sitio
+window.actualizarEstadoBotonNominaciones = actualizarEstadoBotonNominaciones;
+
 
     // =========================
     // RESULTADOS CON LOGIN ADMIN
     // =========================
-    const ADMIN_USER = "admin";
-    const ADMIN_PASS = "1234";
-    
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const user = document.getElementById('adminUser').value.trim();
-      const pass = document.getElementById('adminPass').value.trim();
-    
-      if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        document.getElementById('login-admin').style.display = 'none';
-        document.getElementById('resultados-contenido').style.display = 'block';
-        cargarResultados();
-      } else {
-        document.getElementById('loginError').style.display = 'block';
-      }
-    });
-    async function cargarResultados() {
+// =========================
+// LOGIN
+// =========================
+document.getElementById("btnLogin").addEventListener("click", async () => {
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+
+  if (usuariosPermitidos[user] && usuariosPermitidos[user].pass === pass) {
+    localStorage.setItem("usuarioLogueado", user);
+    mostrarPerfil(user);
+    controlarAccesoResultados();
+
+    // Oculta login y muestra app
+    document.getElementById("login").style.display = "none";
+    document.getElementById("appContent").style.display = "block";
+
+    // Arranca en inicio
+    mostrarSeccion("inicio");
+
+    // 👇 Refresca estado del botón de nominaciones ya con usuario en localStorage
+    if (window.actualizarEstadoBotonNominaciones) {
+      await window.actualizarEstadoBotonNominaciones();
+    }
+  } else {
+    document.getElementById("loginError").style.display = "block";
+  }
+});
+
+   async function cargarResultados() {
   const contenedor = document.getElementById('tabla-resultados');
   contenedor.innerHTML = "<p>Cargando resultados...</p>";
 
   try {
-    const q = query(collection(db, "nominaciones"));
-    const snapshot = await getDocs(q);
+    let ciclo = await getCicloActual();
 
-    const conteo = {};
-    const votantes = new Set(); // para guardar nombres únicos
+    // 1) Intentamos ciclo actual
+    let qActual = query(collection(db, "nominaciones"), where("ciclo", "==", ciclo));
+    let snapshot = await getDocs(qActual);
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const categoria = data.categoria || "Sin categoría";
-
-      // Guardar el nombre del votante
-      if (data.usuario) {
-        votantes.add(data.usuario);
+    // 2) Si no hay datos en el actual, probamos con el anterior
+    if (snapshot.empty && ciclo > 1) {
+      const qPrev = query(collection(db, "nominaciones"), where("ciclo", "==", ciclo - 1));
+      const snapPrev = await getDocs(qPrev);
+      if (!snapPrev.empty) {
+        ciclo = ciclo - 1;
+        snapshot = snapPrev;
       }
+    }
 
-      // Contar votos por categoría
+    // 3) Si sigue vacío, mostramos mensaje
+    if (snapshot.empty) {
+      contenedor.innerHTML = "<p>No hay resultados aún.</p>";
+      return;
+    }
+
+    // ---- Render resultados ----
+    const conteo = {};
+    const votantes = new Set();
+
+    snapshot.forEach(d => {
+      const data = d.data();
+      const categoria = data.categoria || "Sin categoría";
+      if (data.usuario) votantes.add(data.usuario);
       if (!conteo[categoria]) conteo[categoria] = {};
-      data.nominados.forEach(nombre => {
-        if (!conteo[categoria][nombre]) conteo[categoria][nombre] = 0;
-        conteo[categoria][nombre]++;
+      (data.nominados || []).forEach(nombre => {
+        conteo[categoria][nombre] = (conteo[categoria][nombre] || 0) + 1;
       });
     });
 
-    // Limpiar contenedor
     contenedor.innerHTML = "";
 
-    // Mostrar lista de votantes arriba del todo
+    // Indicador de qué ciclo se muestra
+    const badge = document.createElement('p');
+    badge.style.opacity = "0.8";
+    badge.innerHTML = `<em>Mostrando resultados del ciclo ${ciclo}</em>`;
+    contenedor.appendChild(badge);
+
     if (votantes.size > 0) {
       const bloqueVotantes = document.createElement('div');
       bloqueVotantes.innerHTML = `
@@ -720,13 +868,12 @@ document.getElementById('enviarTodasNominaciones').addEventListener('click', asy
       contenedor.appendChild(bloqueVotantes);
     }
 
-    // Mostrar resultados por categoría
     for (const categoria in conteo) {
       const bloque = document.createElement('div');
       bloque.innerHTML = `<h4>${categoria}</h4>`;
       const lista = document.createElement('ul');
       Object.entries(conteo[categoria])
-        .sort((a, b) => b[1] - a[1])
+        .sort((a,b) => b[1]-a[1])
         .forEach(([nombre, votos]) => {
           const li = document.createElement('li');
           li.textContent = `${nombre}: ${votos} votos`;
@@ -747,7 +894,6 @@ document.getElementById('enviarTodasNominaciones').addEventListener('click', asy
     // Opcional: arrancar en Inicio
     mostrarSeccion('inicio');
 
-    import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // Función genérica para borrar todos los documentos de una colección
 async function borrarColeccion(nombreColeccion) {
@@ -772,25 +918,23 @@ async function borrarColeccion(nombreColeccion) {
   }
 }
 
-// Eventos de los botones (solo se ejecutan tras login admin)
-document.getElementById('borrarVotos').addEventListener('click', () => {
-  borrarColeccion("votos");
-});
+document.getElementById('restaurarVotaciones').addEventListener('click', async () => {
+  if (!confirm("Iniciar una NUEVA ronda de votaciones. Los registros anteriores se conservarán. ¿Continuar?")) return;
 
-document.getElementById('borrarNominaciones').addEventListener('click', () => {
-  borrarColeccion("nominaciones");
-});
+  try {
+    const nuevoCiclo = await aumentarCiclo();  // solo subimos el ciclo
+    alert(`¡Listo! Se ha iniciado el ciclo ${nuevoCiclo}. Todos pueden volver a votar.`);
 
-// Botón para restaurar votaciones
-document.getElementById('restaurarVotaciones').addEventListener('click', () => {
-  if (confirm("¿Seguro que quieres permitir que todos puedan volver a votar?")) {
-    // Elimina la marca de bloqueo en este navegador
-    localStorage.removeItem('nominacionesEnviadas');
-    localStorage.removeItem('votoEnviado'); // por si usas otra clave para votos
-
-    alert("Se ha restaurado la posibilidad de votar en este navegador. Si quieres que todos puedan votar de nuevo, recuerda que este botón solo afecta al bloqueo local; para un desbloqueo global tendrías que borrar los registros en la base de datos.");
+    // ⛔ NO llamamos a cargarResultados() para no vaciar la vista actual
+    if (window.actualizarEstadoBotonNominaciones) await window.actualizarEstadoBotonNominaciones();
+  } catch (e) {
+    console.error(e);
+    alert("No se pudo iniciar la nueva ronda.");
   }
 });
+
+
+
 
 
 // Modal de categorías
